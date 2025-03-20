@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 import requests
 
-load_dotenv()  # Load environment variables from .env
+load_dotenv()  
 
 API_KEY = os.getenv("HF_API_KEY")
 
