@@ -1,13 +1,17 @@
-import requests
+from dotenv import load_dotenv
 import os
+import requests
 
-API_URL = "https://api-inference.huggingface.co/models/Junjun21/pet-care-chat-bot"
-HEADERS = {"Authorization": f"Bearer {os.getenv('HF_API_KEY')}"}
+load_dotenv()  # Load environment variables from .env
 
-def query(payload):
-    response = requests.post(API_URL, headers=HEADERS, json=payload)
-    return response.json()
+API_KEY = os.getenv("HF_API_KEY")
 
-test_input = {"inputs": "How do I take care of my dog's diet?"}
-output = query(test_input)
-print(output)
+if not API_KEY:
+    print("Error: API key not found. Make sure it's set in the .env file.")
+    exit()
+
+headers = {"Authorization": f"Bearer {API_KEY}"}
+response = requests.get("https://huggingface.co/api/whoami-v2", headers=headers)
+
+print("Response Status Code:", response.status_code)
+print("Response Text:", response.text)
