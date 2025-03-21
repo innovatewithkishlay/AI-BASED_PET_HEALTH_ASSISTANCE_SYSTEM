@@ -1,37 +1,32 @@
 const axios = require("axios");
+require("dotenv").config();
 
-const queryHuggingFaceModel = async (message) => {
-  const API_URL =
-    "https://api-inference.huggingface.co/models/Junjun21/pet-care-chat-bot";
-  const headers = {
-    Authorization: `Bearer ${process.env.HF_API_KEY}`,
-    "Content-Type": "application/json",
-  };
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
+const getChatbotResponse = async (userMessage) => {
   try {
-    console.log("Sending request to Hugging Face API...");
-    console.log("User Message:", message);
-
     const response = await axios.post(
-      API_URL,
-      { inputs: message },
-      { headers }
+      GROQ_URL,
+      {
+        model: "llama3-8b-8192",
+        messages: [{ role: "user", content: userMessage }],
+        temperature: 0.7, // Controls randomness (higher = more creative)
+        max_tokens: 200, // Limits response length
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
 
-    console.log("Raw API Response:", response.data);
-
-    if (!response.data || response.data.length === 0) {
-      throw new Error("Empty response from AI model");
-    }
-
-    return response.data;
+    return response.data.choices[0].message.content;
   } catch (error) {
-    console.error(
-      "Error querying Hugging Face API:",
-      error.response ? error.response.data : error.message
-    );
-    return { error: "Failed to fetch response from AI model" };
+    console.error("Groq API Error:", error.response?.data || error.message);
+    return "Sorry, I couldn't fetch a response.";
   }
 };
 
-module.exports = queryHuggingFaceModel;
+module.exports = { getChatbotResponse };

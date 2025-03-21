@@ -5,10 +5,14 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
+console.log(
+  "Loaded API Key:",
+  process.env.GROQ_API_KEY ? "✅ Loaded" : "❌ Not Loaded"
+);
 
 const chatbotRoutes = require("./routes/chatbot");
 app.use("/api/chatbot", chatbotRoutes);
