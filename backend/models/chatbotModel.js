@@ -11,8 +11,6 @@ const getChatbotResponse = async (userMessage) => {
       {
         model: "llama3-8b-8192",
         messages: [{ role: "user", content: userMessage }],
-        temperature: 0.7,
-        max_tokens: 200,
       },
       {
         headers: {
@@ -24,6 +22,16 @@ const getChatbotResponse = async (userMessage) => {
 
     return response.data.choices[0].message.content;
   } catch (error) {
+    // yhaa network check kr rha hu
+    if (
+      error.code === "ECONNREFUSED" ||
+      error.code === "ENOTFOUND" ||
+      error.message.includes("Network Error")
+    ) {
+      console.error("Network Error: Please check your internet connection.");
+      return "Sorry, I couldn't fetch a response. Please check your internet connection.";
+    }
+
     console.error("Groq API Error:", error.response?.data || error.message);
     return "Sorry, I couldn't fetch a response.";
   }
