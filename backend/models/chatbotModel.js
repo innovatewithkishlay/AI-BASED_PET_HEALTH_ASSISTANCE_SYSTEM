@@ -4,6 +4,11 @@ require("dotenv").config();
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
+if (!GROQ_API_KEY) {
+  console.error("Error: GROQ_API_KEY is not defined in the .env file.");
+  process.exit(1);
+}
+
 const getChatbotResponse = async (userMessage) => {
   try {
     const response = await axios.post(
@@ -20,9 +25,11 @@ const getChatbotResponse = async (userMessage) => {
       }
     );
 
-    return response.data.choices[0].message.content;
+    return (
+      response.data?.choices?.[0]?.message?.content ||
+      "No response from the chatbot."
+    );
   } catch (error) {
-    // yhaa network check kr rha hu
     if (
       error.code === "ECONNREFUSED" ||
       error.code === "ENOTFOUND" ||

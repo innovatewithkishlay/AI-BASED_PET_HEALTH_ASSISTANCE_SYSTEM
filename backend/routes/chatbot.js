@@ -9,8 +9,13 @@ router.post("/message", async (req, res) => {
     return res.status(400).json({ error: "Message is required" });
   }
 
-  const reply = await getChatbotResponse(userMessage);
-  res.json({ reply });
+  try {
+    const reply = await getChatbotResponse(userMessage);
+    res.json({ reply });
+  } catch (error) {
+    console.error("Error in chatbot route:", error.message || error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

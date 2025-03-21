@@ -13,7 +13,7 @@ const ChatMessage = ({ message, isUser }) => {
           isUser ? "bg-blue-500" : "bg-gray-700"
         }`}
       >
-        {message}
+        {message || "No message available"}
       </div>
     </motion.div>
   );

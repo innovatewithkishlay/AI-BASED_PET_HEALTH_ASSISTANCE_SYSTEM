@@ -7,7 +7,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Only show Navbar on Home page */}
         <Route
           path="/"
           element={

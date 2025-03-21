@@ -1,12 +1,30 @@
 import { useState } from "react";
+import axios from "axios";
 
-const ChatInput = ({ sendMessage }) => {
+const ChatInput = ({ addMessageToChat }) => {
   const [input, setInput] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() !== "") {
-      sendMessage(input);
+      addMessageToChat(input, "user");
       setInput("");
+
+      try {
+        const response = await axios.post(
+          "http://localhost:5001/api/chatbot/message",
+          {
+            message: input,
+          }
+        );
+
+        addMessageToChat(response.data.reply, "bot");
+      } catch (error) {
+        console.error("Error fetching response:", error);
+        addMessageToChat(
+          "Sorry, I couldn't connect to the server. Please try again later.",
+          "bot"
+        );
+      }
     }
   };
 

@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 console.log(
   "Loaded API Key:",
-  process.env.GROQ_API_KEY ? "✅ Loaded" : "❌ Not Loaded"
+  process.env.GROQ_API_KEY ? "Loaded" : "Not Loaded"
 );
 
 const chatbotRoutes = require("./routes/chatbot");
