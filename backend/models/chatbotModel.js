@@ -11,8 +11,8 @@ const getChatbotResponse = async (userMessage) => {
       {
         model: "llama3-8b-8192",
         messages: [{ role: "user", content: userMessage }],
-        temperature: 0.7, // Controls randomness (higher = more creative)
-        max_tokens: 200, // Limits response length
+        temperature: 0.7,
+        max_tokens: 200,
       },
       {
         headers: {
