@@ -12,6 +12,7 @@ const Home = () => {
     "Your Trusted Pet Health Companion",
     "Caring for Your Furry Friends",
     "Expert Advice for Pet Wellness",
+    "Our Ai will help you to solve your queries",
   ];
 
   useEffect(() => {
