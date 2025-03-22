@@ -5,6 +5,7 @@ import { FiCopy } from "react-icons/fi";
 import { IoSend, IoArrowUpCircle, IoStopCircle } from "react-icons/io5";
 import { AiOutlineSetting } from "react-icons/ai";
 import axios from "axios";
+import logo from "../assets/logo.png";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -21,6 +22,7 @@ const Chatbot = () => {
 
   const chatContainerRef = useRef(null);
   const settingsRef = useRef(null);
+  const lastMessageRef = useRef(null);
 
   const initialTexts = [
     "How can I assist you with your pet's health today?",
@@ -90,7 +92,11 @@ const Chatbot = () => {
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+      if (
+        settingsRef.current &&
+        !settingsRef.current.contains(event.target) &&
+        !event.target.closest(".text-gray-800")
+      ) {
         setShowSettings(false);
       }
     };
@@ -103,6 +109,12 @@ const Chatbot = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [showSettings]);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
@@ -157,8 +169,8 @@ const Chatbot = () => {
   };
 
   const simulateTypingEffect = (fullMessage) => {
-    const formattedMessage = formatBotResponse(fullMessage); // Format the response
-    const words = formattedMessage.split(" "); // Split the message into words
+    const formattedMessage = formatBotResponse(fullMessage);
+    const words = formattedMessage.split(" ");
     let currentMessage = "";
     let wordIndex = 0;
 
@@ -220,27 +232,32 @@ const Chatbot = () => {
 
   return (
     <motion.div
-      className="h-screen bg-gradient-to-br from-blue-100 to-green-200 flex flex-col justify-between"
+      className="h-screen bg-[#FDE663] flex flex-col justify-between"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       style={{ overflowX: "hidden" }}
     >
-      <div className="absolute top-4 left-6 text-gray-800 text-xl md:text-2xl font-bold tracking-wide flex items-center gap-2">
-        <span className="text-blue-600">AI Pet</span> Health Assistant{" "}
-        <span className="text-2xl md:text-3xl">🐾</span>
-      </div>
-
-      <div
-        className="absolute top-4 right-6 text-gray-800 text-2xl font-bold tracking-wide flex items-center gap-2 cursor-pointer"
-        onClick={() => setShowSettings(!showSettings)}
-      >
-        <AiOutlineSetting className="text-blue-600" />
+      <div className="fixed top-0 left-0 w-full py-4 px-4 bg-[#FDE663] z-50">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <img src={logo} alt="Logo" className="w-16 h-16 object-contain" />
+          </div>
+          <div
+            className="text-gray-800 text-2xl cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowSettings((prev) => !prev);
+            }}
+          >
+            <AiOutlineSetting className="text-blue-600" />
+          </div>
+        </div>
       </div>
 
       {showSettings && (
         <motion.div
           ref={settingsRef}
-          className="absolute top-16 right-4 md:right-10 bg-white text-gray-800 shadow-lg rounded-lg p-4 w-64 md:w-80"
+          className="absolute top-16 right-4 md:right-10 bg-white text-gray-800 shadow-lg rounded-lg p-4 w-56 md:w-64 z-[60]"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 50 }}
@@ -261,11 +278,7 @@ const Chatbot = () => {
       )}
 
       <div
-        className="flex-grow w-full overflow-y-auto"
-        style={{
-          paddingTop: "20px",
-          paddingBottom: "100px",
-        }}
+        className="flex-grow w-full overflow-y-auto pt-20 px-4"
         ref={chatContainerRef}
       >
         <div className="w-full max-w-lg md:max-w-3xl mx-auto px-4">
@@ -288,7 +301,6 @@ const Chatbot = () => {
               ></span>
             </motion.p>
           )}
-
           {messages.length === 0
             ? null
             : messages.map((msg, index) => (
@@ -304,6 +316,7 @@ const Chatbot = () => {
                   }}
                   initial={{ opacity: 0, x: msg.sender === "user" ? 50 : -50 }}
                   animate={{ opacity: 1, x: 0 }}
+                  ref={index === messages.length - 1 ? lastMessageRef : null}
                 >
                   {msg.sender === "bot" ? (
                     <span
@@ -329,7 +342,6 @@ const Chatbot = () => {
                   )}
                 </motion.div>
               ))}
-
           {loading && (
             <motion.div
               className="my-3 text-gray-700 self-start text-sm font-light"
@@ -339,7 +351,6 @@ const Chatbot = () => {
               Just a second{loadingDots}
             </motion.div>
           )}
-
           {responseStopped && (
             <motion.div
               className="my-3 text-gray-500 self-start text-lg italic"
@@ -349,10 +360,11 @@ const Chatbot = () => {
               You stopped the response.
             </motion.div>
           )}
+          <div className="h-24"></div>
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 w-full py-4 px-4 border-t mb-3 border-gray-300">
+      <div className="fixed bottom-0 left-0 w-full py-4 px-4 bg-[#FDE663]">
         <div className="flex w-full max-w-lg md:max-w-3xl mx-auto items-center bg-gray-100 rounded-lg border border-gray-400 relative">
           <textarea
             className="flex-grow p-3 md:p-4 bg-gray-100 text-black rounded-lg outline-none resize-none overflow-hidden"
@@ -366,7 +378,6 @@ const Chatbot = () => {
               maxHeight: "150px",
             }}
           />
-
           <button
             className="absolute bottom-2 right-2 bg-blue-500 text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-300"
             onClick={loading ? handleStopResponse : handleSendMessage}
@@ -378,14 +389,6 @@ const Chatbot = () => {
             )}
           </button>
         </div>
-      </div>
-
-      {/* Disclaimer */}
-      <div className="text-center text-gray-600 text-xs md:text-sm mb-1">
-        <p>
-          Note: May not always provide accurate or complete information. Please
-          consult a veterinarian for professional advice.
-        </p>
       </div>
     </motion.div>
   );

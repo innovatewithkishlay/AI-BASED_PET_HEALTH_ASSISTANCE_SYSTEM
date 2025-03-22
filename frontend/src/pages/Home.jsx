@@ -48,9 +48,9 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-full h-[675px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8">
+      <div className="w-full h-[740px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8">
         <motion.div
-          className="text-gray-800 font-bold text-3xl md:text-5xl tracking-wide flex-1 text-center md:text-left mb-6 md:mb-0"
+          className="text-gray-800 font-bold text-3xl md:text-5xl tracking-wide flex-1 text-center md:text-left mb-2 sm:mb-4 md:mb-0 mt-20 sm:mt-24 md:mt-0"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -71,7 +71,7 @@ const Home = () => {
           <img
             src={dog1image}
             alt="Dog"
-            className="w-48 h-48 md:w-[50%] md:h-auto object-contain"
+            className="w-48 h-48 sm:w-64 sm:h-64 md:w-[50%] md:h-auto object-contain mt-2 sm:mt-4"
           />
         </motion.div>
       </div>
