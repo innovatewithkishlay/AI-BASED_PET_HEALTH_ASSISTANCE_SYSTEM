@@ -8,19 +8,48 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required.";
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
+    setLoading(true);
     try {
-      await signUp(formData); // Call the API utility
-      navigate("/verify-otp", { state: { email: formData.email } }); // Navigate to Verify OTP page
+      await signUp(formData);
+      alert("Sign-Up Successful!");
     } catch (error) {
       console.error("Sign-Up Failed:", error);
+      alert("Sign-Up Failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,9 +65,13 @@ const SignUp = () => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2"
-              required
+              className={`w-full border rounded-lg p-2 ${
+                errors.username ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Email</label>
@@ -47,9 +80,13 @@ const SignUp = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2"
-              required
+              className={`w-full border rounded-lg p-2 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Password</label>
@@ -58,15 +95,24 @@ const SignUp = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2"
-              required
+              className={`w-full border rounded-lg p-2 ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg"
+            className={`w-full py-2 rounded-lg flex items-center justify-center ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600 text-white"
+            }`}
+            disabled={loading}
           >
-            Sign Up
+            {loading ? "Wait..." : "Sign Up"}
           </button>
         </form>
       </div>

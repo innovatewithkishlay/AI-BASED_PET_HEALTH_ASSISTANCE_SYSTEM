@@ -3,13 +3,14 @@ import { toast } from "react-toastify";
 
 const API_BASE_URL = "http://localhost:5001/api/auth";
 
+// Function to handle Sign-Up
 export const signUp = async (data) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/signup`, data);
-    toast.success(response.data.message); // Show success toast
+    toast.success(response.data.message);
     return response;
   } catch (error) {
-    toast.error(error.response?.data?.error || "Sign-Up Failed"); // Show error toast
+    toast.error(error.response?.data?.error || "Sign-Up Failed");
     throw error;
   }
 };
@@ -20,10 +21,10 @@ export const verifyOTP = async (data) => {
       `${API_BASE_URL}/verify-signup-otp`,
       data
     );
-    toast.success(response.data.message); // Show success toast
+    toast.success(response.data.message);
     return response;
   } catch (error) {
-    toast.error(error.response?.data?.error || "OTP Verification Failed"); // Show error toast
+    toast.error(error.response?.data?.error || "OTP Verification Failed");
     throw error;
   }
 };
