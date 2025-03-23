@@ -1,26 +1,14 @@
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
-        isScrolled ? "bg-white" : "bg-[#FDE663]"
-      } px-6 md:px-20 py-4 flex justify-between items-center`}
+      className="fixed top-0 left-0 w-full z-50 bg-[#FDE663] px-6 md:px-20 py-4 flex justify-between items-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -31,13 +19,13 @@ const Navbar = () => {
       </div>
 
       {/* Navbar Options */}
-      <div className="flex gap-[40px] md:gap-[60px]">
+      <div className="flex gap-6">
         <Link
           to="/"
           className={`${
             location.pathname === "/"
-              ? "font-[SFUIText] font-bold text-black"
-              : "font-[SFUIText] font-normal text-[rgb(121,121,121)]"
+              ? "font-bold text-black"
+              : "font-normal text-gray-600"
           } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
         >
           What is PetCare
@@ -45,12 +33,22 @@ const Navbar = () => {
         <Link
           to="/chatbot"
           className={`${
-            location.pathname === "/our-ai"
-              ? "font-[SFUIText] font-bold text-black"
-              : "font-[SFUIText] font-normal text-[rgb(121,121,121)]"
+            location.pathname === "/chatbot"
+              ? "font-bold text-black"
+              : "font-normal text-gray-600"
           } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
         >
           Our AI
+        </Link>
+        <Link
+          to="/signup"
+          className={`${
+            location.pathname === "/signup"
+              ? "font-bold text-black"
+              : "font-normal text-gray-600"
+          } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
+        >
+          Sign Up
         </Link>
       </div>
     </motion.nav>
