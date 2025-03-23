@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
-import SignUpModal from "./SignUpModal"; // Import the Sign-Up modal component
+import SignUpModal from "./SignUpModal";
 
 const Navbar = () => {
   const location = useLocation();
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false); // State to control the modal
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
   return (
     <>
