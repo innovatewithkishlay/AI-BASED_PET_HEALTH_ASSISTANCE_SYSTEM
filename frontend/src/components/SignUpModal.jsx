@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { signUp } from "../utils/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
+import CustomToast from "./CustomToast"; // Import the custom toast component
 
 const SignUpModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -21,11 +23,15 @@ const SignUpModal = ({ onClose }) => {
     setLoading(true);
     try {
       await signUp(formData); // Call the backend API to create the user
-      alert("Sign-Up Successful!");
+
+      // Show custom success toast
+      toast(<CustomToast type="success" message="Sign-Up Successful!" />);
       onClose(); // Close the modal after successful sign-up
     } catch (error) {
-      console.error("Sign-Up Failed:", error);
-      alert("Sign-Up Failed. Please try again.");
+      // Show custom error toast
+      toast(
+        <CustomToast type="error" message="Sign-Up Failed. Please try again." />
+      );
     } finally {
       setLoading(false); // Reset loading state
     }

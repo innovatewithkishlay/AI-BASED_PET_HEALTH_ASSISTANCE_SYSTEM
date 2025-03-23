@@ -3,6 +3,8 @@ import Home from "./pages/Home";
 import Chatbot from "./pages/Chatbot";
 import Navbar from "./components/Navbar";
 import SignUp from "./pages/Signup";
+import { ToastContainer } from "react-toastify"; // Import ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 
 const App = () => {
   return (
@@ -41,6 +43,8 @@ const App = () => {
           }
         />
       </Routes>
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );
 };
