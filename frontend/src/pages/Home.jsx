@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import dog1image from "../assets/dog1image.png";
+import "../styles/scrollbar.css"; // Import the custom scrollbar styles
 
 const Home = () => {
   const [currentText, setCurrentText] = useState("");
@@ -48,7 +49,7 @@ const Home = () => {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen overflow-y-scroll custom-scrollbar">
       <div className="w-full h-[740px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8">
         <motion.div
           className="text-gray-800 font-bold text-3xl md:text-5xl tracking-wide flex-1 text-center md:text-left mb-2 sm:mb-4 md:mb-0 mt-20 sm:mt-24 md:mt-0"
@@ -82,7 +83,7 @@ const Home = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.6 }}
       ></motion.div>
-    </>
+    </div>
   );
 };
 

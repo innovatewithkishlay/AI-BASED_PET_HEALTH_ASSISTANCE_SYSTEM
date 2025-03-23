@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user.js");
 const { generateToken } = require("../utils/jwtUtils");
+const bcrypt = require("bcrypt");
 
 // Sign-Up Route
 router.post("/signup", async (req, res) => {
@@ -17,15 +18,16 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ error: "Email already exists" });
     }
 
-    // Create a new user
-    const newUser = new User({ username, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
-    // Generate a token for the user
     const token = generateToken(newUser._id);
 
     res.status(201).json({ message: "User registered successfully", token });
   } catch (error) {
+    console.error("Sign-Up Error:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -49,6 +51,7 @@ router.post("/login", async (req, res) => {
 
     res.json({ message: "Login successful", token });
   } catch (error) {
+    console.error("Login Error:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

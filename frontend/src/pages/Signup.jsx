@@ -10,7 +10,6 @@ const SignUp = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showOtpModal, setShowOtpModal] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -45,6 +44,7 @@ const SignUp = () => {
     try {
       await signUp(formData);
       alert("Sign-Up Successful!");
+      navigate("/login"); // Redirect to login page after successful sign-up
     } catch (error) {
       console.error("Sign-Up Failed:", error);
       alert("Sign-Up Failed. Please try again.");
@@ -115,6 +115,17 @@ const SignUp = () => {
             {loading ? "Wait..." : "Sign Up"}
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <button
+              onClick={() => navigate("/login")} // Navigate to the login page
+              className="text-blue-600 hover:underline"
+            >
+              Login
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

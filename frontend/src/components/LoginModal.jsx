@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { signUp } from "../utils/api";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { login } from "../utils/api";
 import { toast } from "react-toastify";
 import CustomToast from "./CustomToast";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const SignUpModal = ({ onClose, onSwitchToLogin }) => {
+const LoginModal = ({ onClose, onSwitchToSignUp, setIsLoggedIn }) => {
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -22,13 +21,20 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signUp(formData);
+      const response = await login(formData);
+      if (response && response.data.token) {
+        localStorage.setItem("authToken", response.data.token);
 
-      toast(<CustomToast type="success" message="Sign-Up Successful!" />);
-      onClose();
+        setIsLoggedIn(true);
+
+        toast(<CustomToast type="success" message="Login Successful!" />);
+        onClose();
+      } else {
+        throw new Error("Invalid login response");
+      }
     } catch (error) {
       toast(
-        <CustomToast type="error" message="Sign-Up Failed. Please try again." />
+        <CustomToast type="error" message="Login Failed. Please try again." />
       );
     } finally {
       setLoading(false);
@@ -49,23 +55,9 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Join the PetCare Family!
+          Welcome Back!
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-              placeholder="Enter your username"
-              required
-            />
-          </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
@@ -115,21 +107,21 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
               }`}
               disabled={loading}
             >
-              {loading ? "Signing Up..." : "Sign Up"}
+              {loading ? "Logging In..." : "Login"}
             </button>
           </div>
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
-            Already have an account?{" "}
+            Don't have an account?{" "}
             <button
               onClick={() => {
-                onClose(); // Close the Sign-Up Modal
-                onSwitchToLogin(); // Open the Login Modal
+                onClose();
+                onSwitchToSignUp();
               }}
               className="text-blue-600 hover:underline"
             >
-              Login
+              Sign Up
             </button>
           </p>
         </div>
@@ -138,4 +130,4 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
   );
 };
 
-export default SignUpModal;
+export default LoginModal;

@@ -1,17 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
 import SignUpModal from "./SignUpModal";
+import LoginModal from "./LoginModal";
+import CustomToast from "./CustomToast";
 
 const Navbar = () => {
   const location = useLocation();
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem("authToken");
+    toast(
+      <CustomToast
+        type="success"
+        message="You have been logged out successfully!"
+      />
+    );
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <>
       <motion.nav
-        className="fixed top-0 left-0 w-full z-50 bg-[#FDE663] px-6 md:px-20 py-4 flex justify-between items-center"
+        className={`fixed top-0 left-0 w-full z-50 px-6 md:px-20 py-4 flex justify-between items-center transition-colors duration-300 ${
+          isScrolled ? "bg-white" : "bg-[#FDE663]"
+        }`} // Removed shadow-md
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -43,22 +77,55 @@ const Navbar = () => {
           >
             Our AI
           </Link>
-          <button
-            onClick={() => setIsSignUpOpen(true)} // Open the modal
-            className={`${
-              location.pathname === "/signup"
-                ? "font-bold text-black"
-                : "font-normal text-gray-600"
-            } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
-          >
-            Sign Up
-          </button>
+
+          {/* Conditionally Render Buttons */}
+          {!isLoggedIn ? (
+            <>
+              <button
+                onClick={() => setIsSignUpOpen(true)}
+                className="text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] font-normal text-gray-600 transition"
+              >
+                Sign Up
+              </button>
+              <button
+                onClick={() => setIsLoginOpen(true)}
+                className="text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] font-normal text-gray-600 transition"
+              >
+                Login
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] font-normal text-gray-600 transition"
+            >
+              Logout
+            </button>
+          )}
         </div>
       </motion.nav>
 
       {/* Sign-Up Modal */}
       {isSignUpOpen && (
-        <SignUpModal onClose={() => setIsSignUpOpen(false)} /> // Pass a function to close the modal
+        <SignUpModal
+          onClose={() => setIsSignUpOpen(false)}
+          onSwitchToLogin={() => {
+            setIsSignUpOpen(false);
+            setIsLoginOpen(true);
+          }}
+        />
+      )}
+
+      {/* Login Modal */}
+      {isLoginOpen && (
+        <LoginModal
+          onClose={() => setIsLoginOpen(false)}
+          onSwitchToSignUp={() => {
+            setIsLoginOpen(false);
+            setIsSignUpOpen(true);
+          }}
+          setIsLoggedIn={setIsLoggedIn}
+        />
       )}
     </>
   );

@@ -1,0 +1,18 @@
+/* Customize the scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light gray background for the track */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #ff69b4, #ff1493); /* Pink gradient */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #ff1493, #ff69b4);
+}
