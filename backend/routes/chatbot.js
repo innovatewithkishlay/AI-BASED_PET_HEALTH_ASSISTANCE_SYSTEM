@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { getChatbotResponse } = require("../models/chatbotModel");
+const verifyToken = require("../middleware/authMiddleware");
 
-router.post("/message", async (req, res) => {
+router.post("/message", verifyToken, async (req, res) => {
   const userMessage = req.body.message;
 
   if (!userMessage) {

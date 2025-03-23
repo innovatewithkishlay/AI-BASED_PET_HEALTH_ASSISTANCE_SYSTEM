@@ -8,6 +8,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -16,15 +17,18 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Routes
 const authRoutes = require("./routes/authRoutes");
-const protectedRoutes = require("./routes/protectedRoutes");
+const chatbotRoutes = require("./routes/chatbot");
 
 app.use("/api/auth", authRoutes);
-app.use("/api/protected", protectedRoutes);
+app.use("/api/chatbot", chatbotRoutes);
 
+// Default Route
 app.get("/", (req, res) => {
   res.send("AI Pet Assistant Server is Running!");
 });
