@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import CustomToast from "./CustomToast";
 
-const SignUpModal = ({ onClose, onSwitchToLogin }) => {
+const SignUpModal = ({ onClose, onSwitchToLogin, setIsLoggedIn }) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -22,14 +22,23 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signUp(formData);
+      const response = await signUp(formData);
+
+      console.log("Sign-Up Successful in Frontend:", response);
+
+      localStorage.setItem("authToken", response.token);
+
+      setIsLoggedIn(true);
 
       toast(<CustomToast type="success" message="Sign-Up Successful!" />);
+
       onClose();
     } catch (error) {
-      toast(
-        <CustomToast type="error" message="Sign-Up Failed. Please try again." />
-      );
+      console.error("Sign-Up Error in Frontend:", error);
+
+      const errorMessage =
+        typeof error === "string" ? error : "Sign-Up Failed. Please try again.";
+      toast(<CustomToast type="error" message={errorMessage} />);
     } finally {
       setLoading(false);
     }
@@ -124,8 +133,8 @@ const SignUpModal = ({ onClose, onSwitchToLogin }) => {
             Already have an account?{" "}
             <button
               onClick={() => {
-                onClose(); // Close the Sign-Up Modal
-                onSwitchToLogin(); // Open the Login Modal
+                onClose();
+                onSwitchToLogin();
               }}
               className="text-blue-600 hover:underline"
             >

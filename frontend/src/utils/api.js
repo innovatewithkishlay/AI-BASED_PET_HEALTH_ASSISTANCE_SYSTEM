@@ -7,11 +7,17 @@ const API_BASE_URL = "http://localhost:5001/api/auth";
 export const signUp = async (data) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/signup`, data);
-    toast.success(response.data.message);
-    return response;
+
+    console.log("Sign-Up Response from Backend:", response.data);
+
+    return response.data;
   } catch (error) {
-    toast.error(error.response?.data?.error || "Sign-Up Failed");
-    throw error;
+    console.error(
+      "Sign-Up Error in API:",
+      error.response?.data?.error || error.message
+    );
+
+    throw error.response?.data?.error || "Sign-Up Failed";
   }
 };
 
@@ -33,10 +39,10 @@ export const verifyOTP = async (data) => {
 export const login = async (data) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/login`, data);
-    toast.success("Login successful!"); // Show success toast
+    toast.success("Login successful!");
     return response;
   } catch (error) {
-    toast.error(error.response?.data?.error || "Login Failed"); // Show error toast
+    toast.error(error.response?.data?.error || "Login Failed");
     throw error;
   }
 };
@@ -45,10 +51,10 @@ export const login = async (data) => {
 export const logout = async () => {
   try {
     const response = await axios.post(`${API_BASE_URL}/logout`);
-    toast.success("Logged out successfully!"); // Show success toast
+    toast.success("Logged out successfully!");
     return response;
   } catch (error) {
-    toast.error("Logout Failed"); // Show error toast
+    toast.error("Logout Failed");
     throw error;
   }
 };

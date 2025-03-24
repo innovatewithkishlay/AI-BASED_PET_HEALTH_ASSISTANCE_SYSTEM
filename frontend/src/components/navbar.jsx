@@ -63,11 +63,20 @@ const Navbar = () => {
             to="/"
             className={`${
               location.pathname === "/"
-                ? "font-bold text-black"
+                ? "font-bold text-gray-800"
                 : "font-normal text-gray-600"
             } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
           >
-            What is PetCare
+            What is{" "}
+            <span
+              className={`${
+                location.pathname === "/"
+                  ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500"
+                  : "text-gray-600"
+              }`}
+            >
+              Pet Care
+            </span>
           </Link>
           <Link
             to="/chatbot"
