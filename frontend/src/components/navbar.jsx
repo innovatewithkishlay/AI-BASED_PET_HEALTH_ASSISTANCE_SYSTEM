@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify"; // Import toast from react-toastify
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import logo from "../assets/logo.png";
 import SignUpModal from "./SignUpModal";
 import LoginModal from "./LoginModal";
@@ -45,7 +47,7 @@ const Navbar = () => {
       <motion.nav
         className={`fixed top-0 left-0 w-full z-50 px-6 md:px-20 py-4 flex justify-between items-center transition-colors duration-300 ${
           isScrolled ? "bg-white" : "bg-[#FDE663]"
-        }`} // Removed shadow-md
+        }`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
