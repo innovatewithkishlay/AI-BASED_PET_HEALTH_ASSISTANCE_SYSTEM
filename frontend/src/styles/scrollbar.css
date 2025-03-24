@@ -16,3 +16,16 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(45deg, #ff1493, #ff69b4);
 }
+/* Continuous line animation */
+@keyframes line-move {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-line-move {
+  animation: line-move 2s linear infinite;
+}
