@@ -23,9 +23,25 @@ router.post("/signup", async (req, res) => {
 
     const token = generateToken(newUser._id);
 
+    console.log("Sign-Up Successful: Sending response to frontend");
     res.status(201).json({ message: "User registered successfully", token });
   } catch (error) {
     console.error("Sign-Up Error:", error.message);
+
+    // Handle duplicate key error
+    if (error.code === 11000) {
+      const duplicateField = Object.keys(error.keyValue)[0];
+      return res
+        .status(400)
+        .json({ error: `${duplicateField} already exists` });
+    }
+
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const errors = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({ error: errors.join(", ") });
+    }
+
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
