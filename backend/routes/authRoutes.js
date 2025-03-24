@@ -18,9 +18,7 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ error: "Email already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({ username, email, password });
     await newUser.save();
 
     const token = generateToken(newUser._id);
@@ -42,11 +40,17 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user || !(await user.comparePassword(password))) {
+    if (!user) {
+      console.error("User not found with email:", email);
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Generate a token for the user
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      console.error("Password comparison failed for user:", email);
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
     const token = generateToken(user._id);
 
     res.json({ message: "Login successful", token });
@@ -56,7 +60,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Logout Route
 router.post("/logout", (req, res) => {
   try {
     res.json({ message: "Logout successful" });
