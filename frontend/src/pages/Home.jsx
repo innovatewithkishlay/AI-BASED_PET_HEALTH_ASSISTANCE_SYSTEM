@@ -264,6 +264,207 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
+      <motion.div
+        className="w-full bg-gray-100 py-16 px-6 md:px-12 flex flex-col items-center text-center"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: false }}
+      >
+        <motion.h2
+          className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-10"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+        >
+          Learn About Pet Care
+        </motion.h2>
+        <motion.p
+          className="text-lg md:text-xl text-gray-600 max-w-3xl mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4 }}
+        >
+          Explore these videos to learn how to take better care of your pets and
+          ensure their health and happiness.
+        </motion.p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {/* Video 1 */}
+          <motion.div
+            className="relative group overflow-hidden rounded-lg shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <iframe
+              className="w-full h-64 md:h-80"
+              src="https://www.youtube.com/embed/Zb3Wzs2FcFE?autoplay=1&mute=1&loop=1&playlist=Zb3Wzs2FcFE&controls=0&modestbranding=1&iv_load_policy=3&showinfo=0"
+              title="Pet Care Video 1"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 backdrop-blur-md transition-all duration-300"></motion.div>
+            <motion.div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <a
+                href="https://www.youtube.com/watch?v=Zb3Wzs2FcFE"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
+                <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+                <span className="relative z-10">Watch Video</span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* Video 2 */}
+          <motion.div
+            className="relative group overflow-hidden rounded-lg shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <iframe
+              className="w-full h-64 md:h-80"
+              src="https://www.youtube.com/embed/Sw4_THvzQgM?autoplay=1&mute=1&loop=1&playlist=Sw4_THvzQgM&controls=0&modestbranding=1&iv_load_policy=3&showinfo=0"
+              title="Pet Care Video 2"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 backdrop-blur-md transition-all duration-300"></motion.div>
+            <motion.div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <a
+                href="https://www.youtube.com/watch?v=Sw4_THvzQgM"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
+                <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+                <span className="relative z-10">Watch Video</span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* Video 3 */}
+          <motion.div
+            className="relative group overflow-hidden rounded-lg shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <iframe
+              className="w-full h-64 md:h-80"
+              src="https://www.youtube.com/embed/Yzv0gXqoCkc?autoplay=1&mute=1&loop=1&playlist=Yzv0gXqoCkc&controls=0&modestbranding=1&iv_load_policy=3&showinfo=0"
+              title="Pet Care Video 3"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 backdrop-blur-md transition-all duration-300"></motion.div>
+            <motion.div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <a
+                href="https://www.youtube.com/watch?v=Yzv0gXqoCkc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
+                <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+                <span className="relative z-10">Watch Video</span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* Playlist 1 */}
+          <motion.div
+            className="relative group overflow-hidden rounded-lg shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <iframe
+              className="w-full h-64 md:h-80"
+              src="https://www.youtube.com/embed/videoseries?list=PLvz_RKESSRFYKYGVntz-384d-Nb6erQd2&autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&iv_load_policy=3&showinfo=0"
+              title="Pet Care Playlist 1"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 backdrop-blur-md transition-all duration-300"></motion.div>
+            <motion.div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <a
+                href="https://www.youtube.com/playlist?list=PLvz_RKESSRFYKYGVntz-384d-Nb6erQd2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
+                <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+                <span className="relative z-10">Watch Playlist</span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* Playlist 2 */}
+          <motion.div
+            className="relative group overflow-hidden rounded-lg shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <iframe
+              className="w-full h-64 md:h-80"
+              src="https://www.youtube.com/embed/videoseries?list=PLP64ATikd4GqAkIVxmzvKKOxs_qroC6JY&autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&iv_load_policy=3&showinfo=0"
+              title="Pet Care Playlist 2"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 backdrop-blur-md transition-all duration-300"></motion.div>
+            <motion.div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <a
+                href="https://www.youtube.com/playlist?list=PLP64ATikd4GqAkIVxmzvKKOxs_qroC6JY"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
+                <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+                <span className="relative z-10">Watch Playlist</span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* Video 6 */}
+          <motion.div
+            className="relative group overflow-hidden rounded-lg shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <iframe
+              className="w-full h-64 md:h-80"
+              src="https://www.youtube.com/embed/9VznqR_8Xaw?autoplay=1&mute=1&loop=1&playlist=9VznqR_8Xaw&controls=0&modestbranding=1&iv_load_policy=3&showinfo=0"
+              title="Pet Care Video 6"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 backdrop-blur-md transition-all duration-300"></motion.div>
+            <motion.div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <a
+                href="https://www.youtube.com/watch?v=9VznqR_8Xaw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
+                <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+                <span className="relative z-10">Watch Video</span>
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
+
       {/* Veterinarian Advice Coming Soon Section */}
       <motion.div
         className="w-full h-[700px] bg-cover bg-center relative flex items-center justify-center"
@@ -340,7 +541,6 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
-      {/* Enhanced Review Section */}
       <motion.div
         className="w-full relative py-16 px-6 md:px-12 overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
