@@ -264,6 +264,7 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
+      {/* video section */}
       <motion.div
         className="w-full bg-gray-100 py-16 px-6 md:px-12 flex flex-col items-center text-center"
         initial={{ opacity: 0, y: 50 }}
@@ -277,7 +278,10 @@ const Home = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          Learn About Pet Care
+          Learn About{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">
+            Pet Care
+          </span>
         </motion.h2>
         <motion.p
           className="text-lg md:text-xl text-gray-600 max-w-3xl mb-12"
@@ -433,35 +437,6 @@ const Home = () => {
               </a>
             </motion.div>
           </motion.div>
-
-          {/* Video 6 */}
-          <motion.div
-            className="relative group overflow-hidden rounded-lg shadow-lg"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-          >
-            <iframe
-              className="w-full h-64 md:h-80"
-              src="https://www.youtube.com/embed/9VznqR_8Xaw?autoplay=1&mute=1&loop=1&playlist=9VznqR_8Xaw&controls=0&modestbranding=1&iv_load_policy=3&showinfo=0"
-              title="Pet Care Video 6"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-            <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 backdrop-blur-md transition-all duration-300"></motion.div>
-            <motion.div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <a
-                href="https://www.youtube.com/watch?v=9VznqR_8Xaw"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
-                <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
-                <span className="relative z-10">Watch Video</span>
-              </a>
-            </motion.div>
-          </motion.div>
         </div>
       </motion.div>
 
@@ -485,7 +460,7 @@ const Home = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          viewport={{ once: false }} // Ensures animation triggers every time it comes into view
+          viewport={{ once: false }}
         >
           <motion.h2
             className="text-4xl md:text-5xl font-extrabold mb-6"
@@ -542,7 +517,7 @@ const Home = () => {
       </motion.div>
 
       {/* Add spacing before the footer */}
-      <div className="h-1"></div>
+      <div className="h-8"></div>
 
       {/* Footer Section */}
       <footer className="w-full bg-gradient-to-r from-blue-900 via-gray-800 to-gray-900 text-white py-16 px-6 md:px-12">
