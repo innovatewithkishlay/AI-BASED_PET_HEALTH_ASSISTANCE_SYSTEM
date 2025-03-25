@@ -264,6 +264,82 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
+      {/* Veterinarian Advice Coming Soon Section */}
+      <motion.div
+        className="w-full h-[700px] bg-cover bg-center relative flex items-center justify-center"
+        style={{
+          backgroundImage: `url(${humanImage})`,
+        }}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: false }} // Ensures animation triggers every time it comes into view
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+        {/* Content */}
+        <motion.div
+          className="relative z-10 text-center text-white px-6 md:px-12"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: false }} // Ensures animation triggers every time it comes into view
+        >
+          <motion.h2
+            className="text-4xl md:text-5xl font-extrabold mb-6"
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            viewport={{ once: false }}
+          >
+            Veterinarian Advice{" "}
+            <span className="text-green-400">Coming Soon</span>
+          </motion.h2>
+          <motion.p
+            className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8"
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            viewport={{ once: false }}
+          >
+            Our web app will soon provide expert veterinarian advice to help you
+            take the best care of your pets. Stay tuned for this exciting
+            feature!
+          </motion.p>
+
+          {/* Button with Popup */}
+          <div className="relative inline-block">
+            <motion.button
+              className="relative px-8 py-3 text-white text-lg font-bold rounded-lg shadow-lg overflow-hidden group transition-all duration-300 bg-gradient-to-r from-blue-500 to-green-500"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              onClick={handleButtonClick} // Trigger popup on click
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
+              <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+              <span className="relative z-10">Learn More</span>
+            </motion.button>
+
+            {/* Popup Message */}
+            {showPopup && (
+              <motion.div
+                className="absolute left-1/2 transform -translate-x-1/2 mt-2 px-4 py-2 bg-gray-800 text-white text-sm rounded-lg shadow-lg"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.3 }}
+              >
+                Coming Soon!
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+
       {/* Enhanced Review Section */}
       <motion.div
         className="w-full relative py-16 px-6 md:px-12 overflow-hidden"
@@ -387,82 +463,6 @@ const Home = () => {
             </div>
           </motion.div>
         </div>
-      </motion.div>
-
-      {/* Veterinarian Advice Coming Soon Section */}
-      <motion.div
-        className="w-full h-[700px] bg-cover bg-center relative flex items-center justify-center"
-        style={{
-          backgroundImage: `url(${humanImage})`,
-        }}
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: false }} // Ensures animation triggers every time it comes into view
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-
-        {/* Content */}
-        <motion.div
-          className="relative z-10 text-center text-white px-6 md:px-12"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          viewport={{ once: false }} // Ensures animation triggers every time it comes into view
-        >
-          <motion.h2
-            className="text-4xl md:text-5xl font-extrabold mb-6"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            viewport={{ once: false }}
-          >
-            Veterinarian Advice{" "}
-            <span className="text-green-400">Coming Soon</span>
-          </motion.h2>
-          <motion.p
-            className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            viewport={{ once: false }}
-          >
-            Our web app will soon provide expert veterinarian advice to help you
-            take the best care of your pets. Stay tuned for this exciting
-            feature!
-          </motion.p>
-
-          {/* Button with Popup */}
-          <div className="relative inline-block">
-            <motion.button
-              className="relative px-8 py-3 text-white text-lg font-bold rounded-lg shadow-lg overflow-hidden group transition-all duration-300 bg-gradient-to-r from-blue-500 to-green-500"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              onClick={handleButtonClick} // Trigger popup on click
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
-              <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
-              <span className="relative z-10">Learn More</span>
-            </motion.button>
-
-            {/* Popup Message */}
-            {showPopup && (
-              <motion.div
-                className="absolute left-1/2 transform -translate-x-1/2 mt-2 px-4 py-2 bg-gray-800 text-white text-sm rounded-lg shadow-lg"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.3 }}
-              >
-                Coming Soon!
-              </motion.div>
-            )}
-          </div>
-        </motion.div>
       </motion.div>
 
       {/* Add spacing before the footer */}
