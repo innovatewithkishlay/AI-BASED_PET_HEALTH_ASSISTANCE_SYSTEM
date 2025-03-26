@@ -268,7 +268,7 @@ const Home = () => {
           </motion.p>
           <Link
             to="/chatbot"
-            className="relative px-6 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300"
+            className="relative px-3 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300 max-w-xs"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
             <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
