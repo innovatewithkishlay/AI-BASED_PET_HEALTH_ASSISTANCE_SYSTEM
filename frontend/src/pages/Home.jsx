@@ -73,7 +73,7 @@ const Home = () => {
     <div className="min-h-screen overflow-x-hidden overflow-y-scroll custom-scrollbar">
       {/* First Section */}
       <motion.div
-        className="w-full h-[640px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8"
+        className="w-full h-[680px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
@@ -81,7 +81,7 @@ const Home = () => {
       >
         {/* Dynamically Typed Text */}
         <motion.div
-          className="text-gray-800 font-bold text-3xl md:text-5xl tracking-wide flex-1 text-center md:text-left mt-24 sm:mt-28 md:mt-0 mb-4 sm:mb-6 md:mb-0"
+          className="text-gray-800 font-bold text-3xl md:text-5xl tracking-wide flex-1 text-center md:text-left mt-20 sm:mt-2 md:mt-0 mb-4 sm:mb-6 md:mb-0"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -112,7 +112,7 @@ const Home = () => {
           <img
             src={dog1image}
             alt="Dog"
-            className="w-64 h-64 sm:w-80 sm:h-80 md:w-[50%] md:h-auto object-contain"
+            className="w-58 h-66 sm:w-82 sm:h-72 md:w-[50%] md:h-auto object-contain"
           />
         </motion.div>
       </motion.div>
@@ -199,14 +199,14 @@ const Home = () => {
 
       {/* Third Section: Have Questions */}
       <motion.div
-        className="w-full bg-gray-50 py-16 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-12"
+        className="w-full bg-gray-50 py-8 sm:py-16 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-12"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
         viewport={{ once: false }}
       >
-        <div className="flex-1 flex justify-center items-center relative">
-          <div className="bg-gray-200 rounded-lg shadow-lg w-[90%] md:w-[50%] h-[500px] flex items-center justify-center relative">
+        <div className="flex-1 flex justify-center items-center relative hidden sm:flex">
+          <div className="bg-gray-200 rounded-lg shadow-lg w-[90%] md:w-[50%] h-[400px] sm:h-[500px] flex items-center justify-center relative">
             <motion.img
               src={positions[0]}
               alt="Message 1"
@@ -242,7 +242,7 @@ const Home = () => {
 
         <motion.div
           id="questions-section"
-          className="flex-1 text-center md:text-left mt-8 md:mt-0"
+          className="flex-1 text-center md:text-left mt-4 sm:mt-0 flex flex-col justify-center"
           initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}

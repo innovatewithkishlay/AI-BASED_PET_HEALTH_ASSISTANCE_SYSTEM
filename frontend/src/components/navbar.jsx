@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { toast } from "react-toastify"; // Import toast from react-toastify
-import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaBars, FaTimes } from "react-icons/fa"; // Import hamburger and close icons
 import logo from "../assets/logo.png";
 import SignUpModal from "./SignUpModal";
 import LoginModal from "./LoginModal";
@@ -14,6 +15,7 @@ const Navbar = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -46,7 +48,7 @@ const Navbar = () => {
     <>
       <motion.nav
         className={`fixed top-0 left-0 w-full z-50 px-6 md:px-20 py-4 flex justify-between items-center transition-colors duration-300 ${
-          isScrolled ? "bg-white" : "bg-[#FDE663]"
+          isScrolled ? "bg-white shadow-md" : "bg-[#FDE663]"
         }`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -57,7 +59,7 @@ const Navbar = () => {
           <img src={logo} alt="Logo" className="w-16 h-16 object-contain" />
         </div>
 
-        {/* Navbar Options */}
+        {/* "What is Pet Care" Option */}
         <div className="flex gap-6">
           <Link
             to="/"
@@ -78,6 +80,10 @@ const Navbar = () => {
               Pet Care
             </span>
           </Link>
+        </div>
+
+        {/* Options for Larger Screens */}
+        <div className="hidden sm:flex gap-6">
           <Link
             to="/chatbot"
             className={`${
@@ -88,8 +94,6 @@ const Navbar = () => {
           >
             Our AI
           </Link>
-
-          {/* Conditionally Render Buttons */}
           {!isLoggedIn ? (
             <>
               <button
@@ -114,7 +118,92 @@ const Navbar = () => {
             </button>
           )}
         </div>
+
+        {/* Hamburger Menu for Mobile */}
+        <div className="sm:hidden flex items-center">
+          {isMenuOpen ? (
+            <FaTimes
+              className="text-gray-800 text-2xl cursor-pointer"
+              onClick={() => setIsMenuOpen(false)}
+            />
+          ) : (
+            <FaBars
+              className="text-gray-800 text-2xl cursor-pointer"
+              onClick={() => setIsMenuOpen(true)}
+            />
+          )}
+        </div>
       </motion.nav>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <>
+          {/* Blur Background */}
+          <motion.div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsMenuOpen(false)} // Close menu when clicking outside
+          ></motion.div>
+
+          {/* Dropdown Menu */}
+          <motion.div
+            className="fixed top-0 right-0 w-3/4 h-full bg-gradient-to-b from-[#FDE663] to-[#FFD700] z-50 shadow-2xl rounded-l-3xl flex flex-col items-center py-8"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Close Button */}
+            <FaTimes
+              className="text-gray-800 text-3xl cursor-pointer self-end mr-6 mb-4 hover:text-red-500 transition duration-300"
+              onClick={() => setIsMenuOpen(false)}
+            />
+
+            {/* Menu Items */}
+            {!isLoggedIn ? (
+              <>
+                <button
+                  onClick={() => {
+                    setIsSignUpOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
+                >
+                  Sign Up
+                </button>
+                <button
+                  onClick={() => {
+                    setIsLoginOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
+                >
+                  Login
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
+              >
+                Logout
+              </button>
+            )}
+            <Link
+              to="/chatbot"
+              className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Our AI
+            </Link>
+          </motion.div>
+        </>
+      )}
 
       {/* Sign-Up Modal */}
       {isSignUpOpen && (
