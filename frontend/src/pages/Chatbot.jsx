@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // Added AnimatePresence
 import { useNavigate } from "react-router-dom";
 import { FiCopy, FiLogOut } from "react-icons/fi";
 import { IoSend, IoArrowUpCircle, IoStopCircle } from "react-icons/io5";
@@ -287,221 +287,225 @@ const Chatbot = () => {
   };
 
   return (
-    <motion.div
-      className="h-screen bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623] flex flex-col justify-between"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      style={{
-        overflowX: "hidden",
-        backgroundSize: "400% 400%", // Makes the gradient animation smoother
-        animation: "gradientAnimation 12s ease infinite", // Smooth gradient animation
-      }}
-    >
-      {/* Header */}
-      <div className="fixed top-0 left-0 w-full py-4 px-6 bg-gradient-to-r from-[#FDE663] via-[#F9D423] to-[#F6A623] z-50">
-        <div className="flex justify-between items-center">
-          {/* Logo and Title */}
-          <div className="flex items-center gap-4">
-            <img src={logo} alt="Logo" className="w-14 h-14 object-contain" />
-            <h1 className="text-3xl font-extrabold text-gray-800 tracking-wide">
-              AI Pet Chatbot
-            </h1>
-          </div>
-
-          {/* Navbar Icons */}
-          <div className="flex items-center gap-6">
-            {/* Home Icon (Logout Style) */}
-            <div
-              className="text-gray-800 text-2xl cursor-pointer"
-              onClick={() => navigate("/")}
-            >
-              <FiLogOut className="text-blue-600 hover:text-green-500 transition duration-300" />
-            </div>
-
-            {/* Settings Icon */}
-            <div
-              className="text-gray-800 text-2xl cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowSettings((prev) => !prev);
-              }}
-            >
-              <AiOutlineSetting className="text-blue-600 hover:text-green-500 transition duration-300" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Settings Dropdown */}
-      {showSettings && (
-        <motion.div
-          ref={settingsRef}
-          className="absolute top-16 right-4 md:right-10 bg-white text-gray-800 shadow-lg rounded-lg p-4 w-56 md:w-64 z-[60]"
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 50 }}
-        >
-          {/* Clear Chat Option */}
-          <div
-            className="flex items-center gap-3 cursor-pointer text-blue-600 hover:text-blue-800 transition duration-300 py-2"
-            onClick={handleClearChat}
-          >
-            <IoArrowUpCircle className="text-xl" />
-            <span>Clear Chat</span>
-          </div>
-
-          {/* About Chatbot */}
-          <div
-            className="flex items-center gap-3 cursor-pointer text-green-600 hover:text-green-800 transition duration-300 py-2"
-            onClick={() => setShowAboutModal(true)}
-          >
-            <AiOutlineSetting className="text-xl" />
-            <span>About Chatbot</span>
-          </div>
-
-          {/* Help Option */}
-          <div
-            className="flex items-center gap-3 cursor-pointer text-red-600 hover:text-red-800 transition duration-300 py-2"
-            onClick={() => setShowHelpModal(true)}
-          >
-            <FiCopy className="text-xl" />
-            <span>Help</span>
-          </div>
-        </motion.div>
-      )}
-
-      {/* About Chatbot Modal */}
-      {showAboutModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              About AI Pet Chatbot
-            </h2>
-            <p className="text-gray-600">
-              This chatbot is designed to assist pet owners with their pet's
-              health concerns. It provides helpful insights and guidance to
-              ensure your furry friends stay happy and healthy.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Help Modal */}
-      {showHelpModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Help</h2>
-            <p className="text-gray-600">
-              To use this chatbot, simply type your pet-related questions in the
-              input box below and press Enter. The chatbot will provide helpful
-              responses to assist you.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Chat Container */}
-      <div
-        className="flex-grow w-full overflow-y-auto pt-24 px-4 bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623]"
-        ref={chatContainerRef}
+    <AnimatePresence>
+      <motion.div
+        className="h-screen bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623] flex flex-col justify-between"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -50 }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
         style={{
-          paddingBottom: "120px", // Add padding to prevent chats from going under the input box
-          overflowX: "hidden", // Ensure no horizontal overflow
+          overflowX: "hidden",
+          backgroundSize: "400% 400%", // Makes the gradient animation smoother
+          animation: "gradientAnimation 12s ease infinite", // Smooth gradient animation
         }}
       >
-        <div className="w-full max-w-lg md:max-w-3xl mx-auto px-4">
-          {showInitialText && (
-            <motion.p
-              className="text-gray-800 text-center text-3xl md:text-5xl font-bold mt-20 md:mt-40"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {dynamicText}
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "2px",
-                  height: "1em",
-                  background:
-                    "linear-gradient(to right, #00FF00, #00BFFF, #32CD32)", // Gradient color
-                  animation: "blink 1s step-end infinite",
-                }}
-              ></span>
-            </motion.p>
-          )}
-          {messages.length === 0
-            ? null
-            : messages.map((msg, index) => (
-                <motion.div
-                  key={index}
-                  className={`p-4 my-5 rounded-lg flex flex-col relative group ${
-                    msg.sender === "user"
-                      ? "bg-gradient-to-r from-blue-500 to-green-500 text-white self-end ml-auto max-w-sm shadow-lg"
-                      : msg.sender === "system"
-                      ? "text-gray-500 italic self-start" // Different style for "You stopped the response"
-                      : "bg-gray-100 text-gray-800 self-start max-w-4xl shadow-md"
-                  }`}
-                  style={{
-                    wordBreak: "break-word",
-                  }}
-                  initial={{ opacity: 0, x: msg.sender === "user" ? 50 : -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  ref={index === messages.length - 1 ? lastMessageRef : null}
-                >
-                  <span
-                    className={`break-words pr-10 ${
-                      msg.sender !== "user" ? "leading-relaxed" : ""
-                    }`}
-                    dangerouslySetInnerHTML={{ __html: msg.text }}
-                  ></span>
-                </motion.div>
-              ))}
-          {waitingForResponse && (
-            <motion.div
-              className="my-3 text-gray-700 self-start text-sm font-light"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              Just a second{loadingDots}
-            </motion.div>
-          )}
-          <div className="h-24"></div>
-        </div>
-      </div>
+        {/* Header */}
+        <div className="fixed top-0 left-0 w-full py-4 px-6 bg-gradient-to-r from-[#FDE663] via-[#F9D423] to-[#F6A623] z-50">
+          <div className="flex justify-between items-center">
+            {/* Logo */}
+            <div className="flex items-center gap-4">
+              <img src={logo} alt="Logo" className="w-14 h-14 object-contain" />
+            </div>
 
-      {/* Input Section */}
-      <div className="fixed bottom-0 left-0 w-full py-4 px-6 bg-transparent shadow-none">
-        <div className="flex w-full max-w-lg md:max-w-3xl mx-auto items-center bg-gray-100 rounded-lg border border-gray-300 relative">
-          <textarea
-            className="flex-grow p-3 md:p-4 bg-gray-200 text-gray-800 rounded-lg outline-none resize-none overflow-hidden"
-            placeholder="Write your concern over here..."
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyPress}
-            rows={1}
-            style={{
-              minHeight: "80px",
-              maxHeight: "150px",
-            }}
-          />
-          <button
-            className={`absolute bottom-2 right-2 ${
-              loading
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
-            } text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300`}
-            onClick={loading ? handleStopResponse : handleSendMessage}
-          >
-            {loading ? (
-              <IoStopCircle className="text-xl md:text-2xl" />
-            ) : (
-              <IoArrowUpCircle className="text-xl md:text-2xl" />
-            )}
-          </button>
+            {/* Navbar Icons */}
+            <div className="flex items-center gap-6">
+              {/* Home Icon (Logout Style) */}
+              <div
+                className="text-gray-800 text-2xl cursor-pointer"
+                onClick={() => navigate("/")}
+              >
+                <FiLogOut className="text-blue-600 hover:text-green-500 transition duration-300" />
+              </div>
+
+              {/* Settings Icon */}
+              <div
+                className="text-gray-800 text-2xl cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSettings((prev) => !prev);
+                }}
+              >
+                <AiOutlineSetting className="text-blue-600 hover:text-green-500 transition duration-300" />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </motion.div>
+
+        {/* Settings Dropdown */}
+        {showSettings && (
+          <motion.div
+            ref={settingsRef}
+            className="absolute top-16 right-4 md:right-10 bg-white text-gray-800 shadow-lg rounded-lg p-4 w-56 md:w-64 z-[60]"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+          >
+            {/* Clear Chat Option */}
+            <div
+              className="flex items-center gap-3 cursor-pointer text-blue-600 hover:text-blue-800 transition duration-300 py-2"
+              onClick={handleClearChat}
+            >
+              <IoArrowUpCircle className="text-xl" />
+              <span>Clear Chat</span>
+            </div>
+
+            {/* About Chatbot */}
+            <div
+              className="flex items-center gap-3 cursor-pointer text-green-600 hover:text-green-800 transition duration-300 py-2"
+              onClick={() => setShowAboutModal(true)}
+            >
+              <AiOutlineSetting className="text-xl" />
+              <span>About Chatbot</span>
+            </div>
+
+            {/* Help Option */}
+            <div
+              className="flex items-center gap-3 cursor-pointer text-red-600 hover:text-red-800 transition duration-300 py-2"
+              onClick={() => setShowHelpModal(true)}
+            >
+              <FiCopy className="text-xl" />
+              <span>Help</span>
+            </div>
+          </motion.div>
+        )}
+
+        {/* About Chatbot Modal */}
+        {showAboutModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                About AI Pet Chatbot
+              </h2>
+              <p className="text-gray-600">
+                This chatbot is designed to assist pet owners with their pet's
+                health concerns. It provides helpful insights and guidance to
+                ensure your furry friends stay happy and healthy.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Help Modal */}
+        {showHelpModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Help</h2>
+              <p className="text-gray-600">
+                To use this chatbot, simply type your pet-related questions in
+                the input box below and press Enter. The chatbot will provide
+                helpful responses to assist you.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Chat Container */}
+        <div
+          className="flex-grow w-full overflow-y-auto pt-24 px-4 bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623]"
+          ref={chatContainerRef}
+          style={{
+            paddingBottom: "120px", // Add padding to prevent chats from going under the input box
+            overflowX: "hidden", // Ensure no horizontal overflow
+          }}
+        >
+          <div className="w-full max-w-lg md:max-w-3xl mx-auto px-4">
+            {showInitialText && (
+              <motion.p
+                className="text-gray-800 text-center text-3xl md:text-5xl font-bold mt-20 md:mt-40"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                {dynamicText}
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "2px",
+                    height: "1em",
+                    background:
+                      "linear-gradient(to right, #00FF00, #00BFFF, #32CD32)", // Gradient color
+                    animation: "blink 1s step-end infinite",
+                  }}
+                ></span>
+              </motion.p>
+            )}
+            {messages.length === 0
+              ? null
+              : messages.map((msg, index) => (
+                  <motion.div
+                    key={index}
+                    className={`p-4 my-5 rounded-lg flex flex-col relative group ${
+                      msg.sender === "user"
+                        ? "bg-gradient-to-r from-blue-500 to-green-500 text-white self-end ml-auto max-w-sm shadow-lg"
+                        : msg.sender === "system"
+                        ? "text-gray-500 italic self-start" // Different style for "You stopped the response"
+                        : "bg-gray-100 text-gray-800 self-start max-w-4xl shadow-md"
+                    }`}
+                    style={{
+                      wordBreak: "break-word",
+                    }}
+                    initial={{
+                      opacity: 0,
+                      x: msg.sender === "user" ? 50 : -50,
+                    }}
+                    animate={{ opacity: 1, x: 0 }}
+                    ref={index === messages.length - 1 ? lastMessageRef : null}
+                  >
+                    <span
+                      className={`break-words pr-10 ${
+                        msg.sender !== "user" ? "leading-relaxed" : ""
+                      }`}
+                      dangerouslySetInnerHTML={{ __html: msg.text }}
+                    ></span>
+                  </motion.div>
+                ))}
+            {waitingForResponse && (
+              <motion.div
+                className="my-3 text-gray-700 self-start text-sm font-light"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                Just a second{loadingDots}
+              </motion.div>
+            )}
+            <div className="h-24"></div>
+          </div>
+        </div>
+
+        {/* Input Section */}
+        <div className="fixed bottom-0 left-0 w-full py-4 px-6 bg-transparent shadow-none">
+          <div className="flex w-full max-w-lg md:max-w-3xl mx-auto items-center bg-gray-100 rounded-lg border border-gray-300 relative">
+            <textarea
+              className="flex-grow p-3 md:p-4 bg-gray-200 text-gray-800 rounded-lg outline-none resize-none overflow-hidden"
+              placeholder="Write your concern over here..."
+              value={input}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyPress}
+              rows={1}
+              style={{
+                minHeight: "80px",
+                maxHeight: "150px",
+              }}
+            />
+            <button
+              className={`absolute bottom-2 right-2 ${
+                loading
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+              } text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300`}
+              onClick={loading ? handleStopResponse : handleSendMessage}
+            >
+              {loading ? (
+                <IoStopCircle className="text-xl md:text-2xl" />
+              ) : (
+                <IoArrowUpCircle className="text-xl md:text-2xl" />
+              )}
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
