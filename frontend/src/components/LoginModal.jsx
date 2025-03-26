@@ -47,19 +47,19 @@ const LoginModal = ({ onClose, onSwitchToSignUp, setIsLoggedIn }) => {
       onClick={onClose}
     >
       <motion.div
-        className="bg-[#FDE663] rounded-lg shadow-lg p-8 w-[90%] max-w-md"
+        className="bg-gradient-to-r from-blue-500 via-green-400 to-yellow-400 rounded-lg shadow-2xl p-8 w-[90%] max-w-md relative"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 0.3 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Welcome Back!
+        <h2 className="text-3xl font-extrabold text-white mb-6 text-center">
+          Welcome Back to <span className="text-yellow-300">PetCare</span>!
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-white mb-1">
               Email
             </label>
             <input
@@ -67,13 +67,13 @@ const LoginModal = ({ onClose, onSwitchToSignUp, setIsLoggedIn }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-300 bg-white text-gray-800"
               placeholder="Enter your email"
               required
             />
           </div>
           <div className="mb-6 relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-white mb-1">
               Password
             </label>
             <input
@@ -81,7 +81,7 @@ const LoginModal = ({ onClose, onSwitchToSignUp, setIsLoggedIn }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-300 bg-white text-gray-800"
               placeholder="Enter your password"
               required
             />
@@ -102,29 +102,35 @@ const LoginModal = ({ onClose, onSwitchToSignUp, setIsLoggedIn }) => {
             </button>
             <button
               type="submit"
-              className={`px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition ${
+              className={`relative px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold rounded-lg overflow-hidden group transition-all duration-300 ${
                 loading ? "cursor-not-allowed opacity-50" : ""
               }`}
               disabled={loading}
             >
-              {loading ? "Logging In..." : "Login"}
+              <span className="absolute inset-0 bg-gradient-to-r from-green-500 to-blue-500"></span>
+              <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
+              <span className="relative z-10">
+                {loading ? "Logging In..." : "Login"}
+              </span>
             </button>
           </div>
         </form>
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
+        <div className="mt-6 text-center">
+          <p className="text-sm text-white">
             Don't have an account?{" "}
             <button
               onClick={() => {
                 onClose();
                 onSwitchToSignUp();
               }}
-              className="text-blue-600 hover:underline"
+              className="text-yellow-300 hover:underline"
             >
               Sign Up
             </button>
           </p>
         </div>
+        <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-r from-yellow-400 to-red-500 rounded-full animate-pulse"></div>
+        <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-blue-400 to-green-500 rounded-full animate-pulse"></div>
       </motion.div>
     </div>
   );

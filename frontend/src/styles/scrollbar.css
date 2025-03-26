@@ -29,3 +29,46 @@
 .animate-line-move {
   animation: line-move 2s linear infinite;
 }
+
+@keyframes sparkle {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle 2s linear infinite;
+}
+
+@keyframes move-sparkle {
+  0% {
+    transform: translateX(-10%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(110%);
+    opacity: 0;
+  }
+}
+
+.sparkle {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  animation: move-sparkle 2s linear infinite;
+}

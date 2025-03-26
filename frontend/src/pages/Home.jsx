@@ -87,7 +87,17 @@ const Home = () => {
           viewport={{ once: false }}
         >
           <span>{typewriterText}</span>
-          <span className="blinking-cursor">|</span>
+          <span
+            className="blinking-cursor"
+            style={{
+              display: "inline-block",
+              width: "2px",
+              height: "1.2em",
+              background:
+                "linear-gradient(to right, #00FF00, #00BFFF, #32CD32)", // Gradient color
+              animation: "blink 1s step-end infinite",
+            }}
+          ></span>
         </motion.div>
         <motion.div
           className="flex-1 flex justify-center"
