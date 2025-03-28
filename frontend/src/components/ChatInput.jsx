@@ -11,7 +11,7 @@ const ChatInput = ({ addMessageToChat }) => {
 
       try {
         const response = await axios.post(
-          "http://localhost:5001/api/chatbot/message",
+          "https://ai-based-pet-health-assistance-system.onrender.com/api/chatbot/message",
           {
             message: input,
           }
