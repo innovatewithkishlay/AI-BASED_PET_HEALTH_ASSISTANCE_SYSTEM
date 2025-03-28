@@ -10,14 +10,16 @@ export const signUp = async (data) => {
 
     console.log("Sign-Up Response from Backend:", response.data);
 
-    return response.data;
+    return response.data; // Return the successful response data
   } catch (error) {
     console.error(
       "Sign-Up Error in API:",
       error.response?.data?.error || error.message
     );
 
-    throw error.response?.data?.error || "Sign-Up Failed";
+    throw {
+      message: error.response?.data?.error || "Sign-Up Failed",
+    };
   }
 };
 

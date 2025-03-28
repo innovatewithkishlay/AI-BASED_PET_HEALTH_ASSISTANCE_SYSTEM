@@ -4,6 +4,7 @@ import { signUp } from "../utils/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import CustomToast from "./CustomToast";
+import PropTypes from "prop-types";
 
 const SignUpModal = ({ onClose, onSwitchToLogin, setIsLoggedIn }) => {
   const [formData, setFormData] = useState({
@@ -24,20 +25,33 @@ const SignUpModal = ({ onClose, onSwitchToLogin, setIsLoggedIn }) => {
     try {
       const response = await signUp(formData);
 
-      console.log("Sign-Up Successful in Frontend:", response);
+      // Check if the response contains the token
+      if (response.token) {
+        console.log("Sign-Up Successful in Frontend:", response);
 
-      localStorage.setItem("authToken", response.token);
+        localStorage.setItem("authToken", response.token);
 
-      setIsLoggedIn(true);
+        if (typeof setIsLoggedIn === "function") {
+          setIsLoggedIn(true); // Ensure setIsLoggedIn is a function before calling it
+        } else {
+          console.error("setIsLoggedIn is not a function");
+        }
 
-      toast(<CustomToast type="success" message="Sign-Up Successful!" />);
+        toast(<CustomToast type="success" message="Sign-Up Successful!" />);
 
-      onClose();
+        onClose();
+      } else {
+        // Handle unexpected response structure
+        throw new Error(
+          response.message || "Sign-Up Failed. Please try again."
+        );
+      }
     } catch (error) {
       console.error("Sign-Up Error in Frontend:", error);
 
       const errorMessage =
-        typeof error === "string" ? error : "Sign-Up Failed. Please try again.";
+        error.message || // Use error message from the thrown error
+        "Sign-Up Failed. Please try again.";
       toast(<CustomToast type="error" message={errorMessage} />);
     } finally {
       setLoading(false);
@@ -151,6 +165,12 @@ const SignUpModal = ({ onClose, onSwitchToLogin, setIsLoggedIn }) => {
       </motion.div>
     </div>
   );
+};
+
+SignUpModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onSwitchToLogin: PropTypes.func.isRequired,
+  setIsLoggedIn: PropTypes.func.isRequired,
 };
 
 export default SignUpModal;

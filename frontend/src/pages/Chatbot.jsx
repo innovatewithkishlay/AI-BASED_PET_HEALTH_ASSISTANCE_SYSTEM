@@ -317,7 +317,7 @@ const Chatbot = () => {
               >
                 <FiLogOut className="text-blue-600 hover:text-green-500 transition duration-300" />
               </div>
-
+              ``
               {/* Settings Icon */}
               <div
                 className="text-gray-800 text-2xl cursor-pointer"
