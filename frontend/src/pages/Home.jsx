@@ -646,7 +646,7 @@ const Home = () => {
             <h4 className="text-2xl font-semibold mb-4">Follow Us</h4>
             <div className="flex gap-6">
               <a
-                href="https://www.linkedin.com"
+                href="https://www.linkedin.com/in/kishlaykumar1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-500 transition duration-300"
@@ -654,7 +654,7 @@ const Home = () => {
                 <i className="fab fa-linkedin text-3xl"></i>
               </a>
               <a
-                href="https://www.instagram.com"
+                href="https://www.instagram.com/kishlay_012"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-pink-500 transition duration-300"
@@ -662,7 +662,7 @@ const Home = () => {
                 <i className="fab fa-instagram text-3xl"></i>
               </a>
               <a
-                href="https://www.twitter.com"
+                href="https://www.twitter.com/@kishlay_012"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition duration-300"
