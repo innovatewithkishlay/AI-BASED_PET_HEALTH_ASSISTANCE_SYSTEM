@@ -38,6 +38,20 @@ const Home = () => {
     !!localStorage.getItem("authToken") // Check if the user is logged in
   );
 
+  // Add these states at the top of your component
+  const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
+  const [isContactUsOpen, setIsContactUsOpen] = useState(false);
+  const [isFAQOpen, setIsFAQOpen] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+
+  // Function to handle "Coming Soon" popup
+  const handleComingSoon = () => {
+    setShowComingSoon(true);
+    setTimeout(() => {
+      setShowComingSoon(false);
+    }, 3000); // Hide after 3 seconds
+  };
+
   useEffect(() => {
     const handleTyping = () => {
       const currentPhrase =
@@ -98,7 +112,7 @@ const Home = () => {
     <div className="min-h-screen overflow-x-hidden overflow-y-scroll custom-scrollbar">
       {/* First Section */}
       <motion.div
-        className="w-full h-[680px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8"
+        className="w-full h-[740px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
@@ -593,36 +607,36 @@ const Home = () => {
             <h4 className="text-2xl font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link
-                  to="/about"
+                <button
+                  onClick={() => setIsAboutUsOpen(true)} // Opens the About Us modal
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   About Us
-                </Link>
+                </button>
               </li>
               <li>
-                <Link
-                  to="/services"
+                <button
+                  onClick={() => handleComingSoon()} // Shows the "Coming Soon" popup
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   Services
-                </Link>
+                </button>
               </li>
               <li>
-                <Link
-                  to="/contact"
+                <button
+                  onClick={() => setIsContactUsOpen(true)} // Opens the Contact Us popup
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   Contact Us
-                </Link>
+                </button>
               </li>
               <li>
-                <Link
-                  to="/faq"
+                <button
+                  onClick={() => setIsFAQOpen(true)} // Opens the FAQ popup
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   FAQ
-                </Link>
+                </button>
               </li>
             </ul>
           </motion.div>

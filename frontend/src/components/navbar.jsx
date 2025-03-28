@@ -19,6 +19,7 @@ const Navbar = () => {
   );
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
+  const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -65,7 +66,7 @@ const Navbar = () => {
     <>
       <motion.nav
         className={`fixed top-0 left-0 w-full z-50 px-6 md:px-20 py-4 flex justify-between items-center transition-colors duration-300 ${
-          isScrolled ? "bg-white shadow-md" : "bg-[#FDE663]"
+          isScrolled ? "bg-white" : "bg-[#FDE663]"
         }`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -110,6 +111,12 @@ const Navbar = () => {
             } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
           >
             Our AI
+          </button>
+          <button
+            onClick={() => setIsAboutUsOpen(true)}
+            className="text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] font-normal text-gray-600 transition"
+          >
+            About Us
           </button>
           {!isLoggedIn ? (
             <>
@@ -166,7 +173,7 @@ const Navbar = () => {
 
           {/* Dropdown Menu */}
           <motion.div
-            className="fixed top-0 right-0 w-3/4 h-full bg-gradient-to-b from-[#FDE663] to-[#FFD700] z-50 shadow-2xl rounded-l-3xl flex flex-col items-center py-8"
+            className="fixed top-0 right-0 w-3/4 h-full bg-gradient-to-b from-[#FDE663] to-[#FFD700] z-50 rounded-l-3xl flex flex-col items-center py-8"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -187,6 +194,15 @@ const Navbar = () => {
               className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
             >
               Our AI
+            </button>
+            <button
+              onClick={() => {
+                setIsAboutUsOpen(true);
+                setIsMenuOpen(false);
+              }}
+              className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
+            >
+              About Us
             </button>
             {!isLoggedIn ? (
               <>
@@ -246,6 +262,104 @@ const Navbar = () => {
           }}
           setIsLoggedIn={setIsLoggedIn}
         />
+      )}
+
+      {/* About Us Modal */}
+      {isAboutUsOpen && (
+        <motion.div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setIsAboutUsOpen(false)}
+        >
+          <motion.div
+            className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-4xl relative"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition"
+              onClick={() => setIsAboutUsOpen(false)}
+            >
+              ✖
+            </button>
+
+            {/* Title */}
+            <motion.h2
+              className="text-3xl font-bold text-center mb-6 text-gray-800"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              Meet Our Team
+            </motion.h2>
+
+            {/* Team Members */}
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Kishlay - Team Leader */}
+              <motion.div
+                className="flex flex-col items-center bg-gradient-to-r from-blue-500 to-green-500 rounded-lg p-4 shadow-lg flex-1"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-blue-500 text-xl font-bold">
+                  K
+                </div>
+                <h3 className="text-xl font-bold mt-3 text-white">Kishlay</h3>
+                <p className="text-sm text-white text-center">
+                  Team Leader & Full Stack Developer
+                </p>
+                <p className="text-sm text-white text-center mt-1">
+                  Reg. No: <span className="font-semibold">12314194</span>
+                </p>
+              </motion.div>
+
+              {/* Saurabh */}
+              <motion.div
+                className="flex flex-col items-center bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-4 shadow-lg flex-1"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-purple-500 text-xl font-bold">
+                  S
+                </div>
+                <h3 className="text-xl font-bold mt-3 text-white">Saurabh</h3>
+                <p className="text-sm text-white text-center">
+                  Full Stack Developer
+                </p>
+                <p className="text-sm text-white text-center mt-1">
+                  Reg. No: <span className="font-semibold">12315536</span>
+                </p>
+              </motion.div>
+
+              {/* Koushik */}
+              <motion.div
+                className="flex flex-col items-center bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-4 shadow-lg flex-1"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-yellow-500 text-xl font-bold">
+                  K
+                </div>
+                <h3 className="text-xl font-bold mt-3 text-white">Koushik</h3>
+                <p className="text-sm text-white text-center">
+                  Full Stack Developer
+                </p>
+                <p className="text-sm text-white text-center mt-1">
+                  Reg. No: <span className="font-semibold">12314158</span>
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.div>
       )}
     </>
   );
