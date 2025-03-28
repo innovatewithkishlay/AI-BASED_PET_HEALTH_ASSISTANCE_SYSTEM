@@ -15,6 +15,9 @@ import person1 from "../assets/person1.avif";
 import person2 from "../assets/person2.jpg";
 import person3 from "../assets/person3.jpg";
 import "../styles/scrollbar.css";
+import ContactUsPopup from "../components/ContactUsPopup";
+import FAQPopup from "../components/FAQPopup";
+import ComingSoonPopup from "../components/ComingSoonPopup";
 
 const Home = () => {
   const [positions, setPositions] = useState([message1, message2, message3]);
@@ -608,14 +611,6 @@ const Home = () => {
             <ul className="space-y-2">
               <li>
                 <button
-                  onClick={() => setIsAboutUsOpen(true)} // Opens the About Us modal
-                  className="text-gray-400 hover:text-white transition duration-300"
-                >
-                  About Us
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => handleComingSoon()} // Shows the "Coming Soon" popup
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
@@ -724,6 +719,17 @@ const Home = () => {
           setIsLoggedIn={setIsLoggedIn}
         />
       )}
+
+      {/* Contact Us Popup */}
+      {isContactUsOpen && (
+        <ContactUsPopup onClose={() => setIsContactUsOpen(false)} />
+      )}
+
+      {/* FAQ Popup */}
+      {isFAQOpen && <FAQPopup onClose={() => setIsFAQOpen(false)} />}
+
+      {/* Coming Soon Popup */}
+      <ComingSoonPopup show={showComingSoon} />
     </div>
   );
 };
