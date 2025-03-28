@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import SignUpModal from "../components/SignUpModal";
+import LoginModal from "../components/LoginModal";
+import CustomToast from "../components/CustomToast";
 import dog1image from "../assets/dog1image.png";
 import message1 from "../assets/message1.webp";
 import message2 from "../assets/message2.webp";
@@ -26,6 +31,12 @@ const Home = () => {
     "Caring for Your Pets, Anytime",
     "Expert Guidance for Pet Wellness",
   ];
+
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("authToken") // Check if the user is logged in
+  );
 
   useEffect(() => {
     const handleTyping = () => {
@@ -68,6 +79,20 @@ const Home = () => {
     }, 4000);
     return () => clearInterval(swapInterval);
   }, []);
+
+  const handleChatbotAccess = () => {
+    if (!isLoggedIn) {
+      toast(
+        <CustomToast
+          type="error"
+          message="You need to sign up or log in to access the AI chatbot!"
+        />
+      );
+      setIsSignUpOpen(true); // Open the signup modal
+    } else {
+      navigate("/chatbot"); // Redirect to the chatbot page
+    }
+  };
 
   return (
     <div className="min-h-screen overflow-x-hidden overflow-y-scroll custom-scrollbar">
@@ -266,14 +291,14 @@ const Home = () => {
           >
             Get answers to your queries with our AI-powered chatbot.
           </motion.p>
-          <Link
-            to="/chatbot"
+          <button
+            onClick={handleChatbotAccess}
             className="relative px-3 py-3 text-white text-lg font-bold rounded-xl shadow-lg overflow-hidden group transition-all duration-300 max-w-xs"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
             <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
             <span className="relative z-10">Chat with Our AI</span>
-          </Link>
+          </button>
         </motion.div>
       </motion.div>
 
@@ -661,6 +686,30 @@ const Home = () => {
           </p>
         </motion.div>
       </footer>
+
+      {/* Sign-Up Modal */}
+      {isSignUpOpen && (
+        <SignUpModal
+          onClose={() => setIsSignUpOpen(false)}
+          onSwitchToLogin={() => {
+            setIsSignUpOpen(false);
+            setIsLoginOpen(true);
+          }}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
+
+      {/* Login Modal */}
+      {isLoginOpen && (
+        <LoginModal
+          onClose={() => setIsLoginOpen(false)}
+          onSwitchToSignUp={() => {
+            setIsLoginOpen(false);
+            setIsSignUpOpen(true);
+          }}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
     </div>
   );
 };

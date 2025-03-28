@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,9 +11,12 @@ import CustomToast from "./CustomToast";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("authToken") // Check if the user is logged in
+  );
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
 
@@ -43,6 +46,20 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleChatbotAccess = () => {
+    if (!isLoggedIn) {
+      toast(
+        <CustomToast
+          type="error"
+          message="You need to sign up or log in to access the AI chatbot!"
+        />
+      );
+      setIsSignUpOpen(true); // Open the signup modal
+    } else {
+      navigate("/chatbot"); // Redirect to the chatbot page
+    }
+  };
 
   return (
     <>
@@ -84,8 +101,8 @@ const Navbar = () => {
 
         {/* Options for Larger Screens */}
         <div className="hidden sm:flex gap-6">
-          <Link
-            to="/chatbot"
+          <button
+            onClick={handleChatbotAccess}
             className={`${
               location.pathname === "/chatbot"
                 ? "font-bold text-black"
@@ -93,7 +110,7 @@ const Navbar = () => {
             } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
           >
             Our AI
-          </Link>
+          </button>
           {!isLoggedIn ? (
             <>
               <button
@@ -162,6 +179,15 @@ const Navbar = () => {
             />
 
             {/* Menu Items */}
+            <button
+              onClick={() => {
+                handleChatbotAccess();
+                setIsMenuOpen(false);
+              }}
+              className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
+            >
+              Our AI
+            </button>
             {!isLoggedIn ? (
               <>
                 <button
@@ -194,13 +220,6 @@ const Navbar = () => {
                 Logout
               </button>
             )}
-            <Link
-              to="/chatbot"
-              className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Our AI
-            </Link>
           </motion.div>
         </>
       )}
@@ -213,6 +232,7 @@ const Navbar = () => {
             setIsSignUpOpen(false);
             setIsLoginOpen(true);
           }}
+          setIsLoggedIn={setIsLoggedIn}
         />
       )}
 
