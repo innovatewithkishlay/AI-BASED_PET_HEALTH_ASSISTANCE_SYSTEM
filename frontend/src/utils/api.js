@@ -1,7 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = "http://localhost:5001/api/auth";
+const API_BASE_URL =
+  "https://ai-based-pet-health-assistance-system.onrender.com/api/auth";
 
 // Function to handle Sign-Up
 export const signUp = async (data) => {

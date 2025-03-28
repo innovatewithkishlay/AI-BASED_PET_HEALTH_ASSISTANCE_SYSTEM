@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion"; // Added AnimatePresence
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FiCopy, FiLogOut } from "react-icons/fi";
 import { IoSend, IoArrowUpCircle, IoStopCircle } from "react-icons/io5";
@@ -52,7 +52,6 @@ const Chatbot = () => {
     }
   }, [messages]);
 
-  // Updated scrolling logic
   useEffect(() => {
     const chatContainer = chatContainerRef.current;
 
@@ -63,9 +62,9 @@ const Chatbot = () => {
           chatContainer.clientHeight;
 
         if (!isAtBottom) {
-          setResponseStopped(true); // Stop auto-scrolling when the user scrolls up
+          setResponseStopped(true);
         } else {
-          setResponseStopped(false); // Resume auto-scrolling when the user scrolls back to the bottom
+          setResponseStopped(false);
         }
       }
     };
@@ -111,7 +110,7 @@ const Chatbot = () => {
         charIndex++;
         if (charIndex === currentText.length) {
           isDeleting = true;
-          setTimeout(typeEffect, 2000); // Pause before deleting
+          setTimeout(typeEffect, 2000);
           return;
         }
       } else {
@@ -126,7 +125,7 @@ const Chatbot = () => {
     };
 
     const startTypingEffect = () => {
-      setTimeout(typeEffect, 1500); // Delay of 1.5 seconds before starting
+      setTimeout(typeEffect, 1500);
     };
 
     startTypingEffect();
@@ -165,19 +164,19 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    setWaitingForResponse(true); // Show "Just a second" while waiting for the API response
+    setWaitingForResponse(true);
 
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/chatbot/message",
+        "https://ai-based-pet-health-assistance-system.onrender.com/api/chatbot/message",
         {
           message: input,
         }
       );
 
       const botMessage = response.data.reply;
-      setWaitingForResponse(false); // Stop showing "Just a second" when the response is received
-      simulateTypingEffect(botMessage); // Start the typing effect
+      setWaitingForResponse(false);
+      simulateTypingEffect(botMessage);
     } catch (error) {
       console.error("Error fetching response:", error.message || error);
 
@@ -185,7 +184,7 @@ const Chatbot = () => {
         ...prev,
         { text: "Error: Unable to reach server", sender: "bot" },
       ]);
-      setWaitingForResponse(false); // Stop showing "Just a second" in case of an error
+      setWaitingForResponse(false);
     }
   };
 
@@ -215,7 +214,7 @@ const Chatbot = () => {
     let currentMessage = "";
     let wordIndex = 0;
 
-    setLoading(true); // Turn on the button when typing starts
+    setLoading(true);
 
     const interval = setInterval(() => {
       if (wordIndex < words.length) {
@@ -231,13 +230,13 @@ const Chatbot = () => {
         });
         wordIndex++;
       } else {
-        clearInterval(interval); // Stop typing when the message is fully typed
+        clearInterval(interval);
         setTypingInterval(null);
-        setLoading(false); // Turn off the button when typing is complete
+        setLoading(false);
       }
-    }, 200); // Typing speed (200ms per word)
+    }, 200);
 
-    setTypingInterval(interval); // Store the interval so it can be cleared later
+    setTypingInterval(interval);
   };
 
   const handleKeyPress = (e) => {
@@ -266,23 +265,22 @@ const Chatbot = () => {
 
   const handleStopResponse = () => {
     if (typingInterval) {
-      clearInterval(typingInterval); // Stop the typing effect
+      clearInterval(typingInterval);
       setTypingInterval(null);
 
       setMessages((prev) => {
         const updatedMessages = [...prev];
         if (updatedMessages[updatedMessages.length - 1]?.sender === "bot") {
-          // Add "You stopped the response" with a different style
           updatedMessages.push({
             text: "You stopped the response.",
-            sender: "system", // Use a different sender type for styling
+            sender: "system",
           });
         }
         return updatedMessages;
       });
 
-      setLoading(false); // Stop the loading state
-      setResponseStopped(true); // Indicate that the response was stopped
+      setLoading(false);
+      setResponseStopped(true);
     }
   };
 
@@ -296,29 +294,22 @@ const Chatbot = () => {
         transition={{ duration: 0.8, ease: "easeInOut" }}
         style={{
           overflowX: "hidden",
-          backgroundSize: "400% 400%", // Makes the gradient animation smoother
-          animation: "gradientAnimation 12s ease infinite", // Smooth gradient animation
+          backgroundSize: "400% 400%",
+          animation: "gradientAnimation 12s ease infinite",
         }}
       >
-        {/* Header */}
         <div className="fixed top-0 left-0 w-full py-4 px-6 bg-gradient-to-r from-[#FDE663] via-[#F9D423] to-[#F6A623] z-50">
           <div className="flex justify-between items-center">
-            {/* Logo */}
             <div className="flex items-center gap-4">
               <img src={logo} alt="Logo" className="w-14 h-14 object-contain" />
             </div>
-
-            {/* Navbar Icons */}
             <div className="flex items-center gap-6">
-              {/* Home Icon (Logout Style) */}
               <div
                 className="text-gray-800 text-2xl cursor-pointer"
                 onClick={() => navigate("/")}
               >
                 <FiLogOut className="text-blue-600 hover:text-green-500 transition duration-300" />
               </div>
-              ``
-              {/* Settings Icon */}
               <div
                 className="text-gray-800 text-2xl cursor-pointer"
                 onClick={(e) => {
@@ -331,8 +322,6 @@ const Chatbot = () => {
             </div>
           </div>
         </div>
-
-        {/* Settings Dropdown */}
         {showSettings && (
           <motion.div
             ref={settingsRef}
@@ -341,7 +330,6 @@ const Chatbot = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
           >
-            {/* Clear Chat Option */}
             <div
               className="flex items-center gap-3 cursor-pointer text-blue-600 hover:text-blue-800 transition duration-300 py-2"
               onClick={handleClearChat}
@@ -349,8 +337,6 @@ const Chatbot = () => {
               <IoArrowUpCircle className="text-xl" />
               <span>Clear Chat</span>
             </div>
-
-            {/* About Chatbot */}
             <div
               className="flex items-center gap-3 cursor-pointer text-green-600 hover:text-green-800 transition duration-300 py-2"
               onClick={() => setShowAboutModal(true)}
@@ -358,8 +344,6 @@ const Chatbot = () => {
               <AiOutlineSetting className="text-xl" />
               <span>About Chatbot</span>
             </div>
-
-            {/* Help Option */}
             <div
               className="flex items-center gap-3 cursor-pointer text-red-600 hover:text-red-800 transition duration-300 py-2"
               onClick={() => setShowHelpModal(true)}
@@ -369,8 +353,6 @@ const Chatbot = () => {
             </div>
           </motion.div>
         )}
-
-        {/* About Chatbot Modal */}
         {showAboutModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
             <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -385,8 +367,6 @@ const Chatbot = () => {
             </div>
           </div>
         )}
-
-        {/* Help Modal */}
         {showHelpModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
             <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -399,14 +379,12 @@ const Chatbot = () => {
             </div>
           </div>
         )}
-
-        {/* Chat Container */}
         <div
           className="flex-grow w-full overflow-y-auto pt-24 px-4 bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623]"
           ref={chatContainerRef}
           style={{
-            paddingBottom: "120px", // Add padding to prevent chats from going under the input box
-            overflowX: "hidden", // Ensure no horizontal overflow
+            paddingBottom: "120px",
+            overflowX: "hidden",
           }}
         >
           <div className="w-full max-w-lg md:max-w-3xl mx-auto px-4">
@@ -424,7 +402,7 @@ const Chatbot = () => {
                     width: "2px",
                     height: "1em",
                     background:
-                      "linear-gradient(to right, #00FF00, #00BFFF, #32CD32)", // Gradient color
+                      "linear-gradient(to right, #00FF00, #00BFFF, #32CD32)",
                     animation: "blink 1s step-end infinite",
                   }}
                 ></span>
@@ -439,7 +417,7 @@ const Chatbot = () => {
                       msg.sender === "user"
                         ? "bg-gradient-to-r from-blue-500 to-green-500 text-white self-end ml-auto max-w-sm shadow-lg"
                         : msg.sender === "system"
-                        ? "text-gray-500 italic self-start" // Different style for "You stopped the response"
+                        ? "text-gray-500 italic self-start"
                         : "bg-gray-100 text-gray-800 self-start max-w-4xl shadow-md"
                     }`}
                     style={{
@@ -472,8 +450,6 @@ const Chatbot = () => {
             <div className="h-24"></div>
           </div>
         </div>
-
-        {/* Input Section */}
         <div className="fixed bottom-0 left-0 w-full py-4 px-6 bg-transparent shadow-none">
           <div className="flex w-full max-w-lg md:max-w-3xl mx-auto items-center bg-gray-100 rounded-lg border border-gray-300 relative">
             <textarea
