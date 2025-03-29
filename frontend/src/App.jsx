@@ -14,7 +14,6 @@ const App = () => {
           path="/"
           element={
             <>
-              <Navbar />
               <Home />
             </>
           }
@@ -25,7 +24,6 @@ const App = () => {
           path="/chatbot"
           element={
             <>
-              <Navbar />
               <Chatbot />
             </>
           }
@@ -36,7 +34,6 @@ const App = () => {
           path="/signup"
           element={
             <>
-              <Navbar />
               <SignUp />
             </>
           }
