@@ -20,6 +20,7 @@ import FAQPopup from "../components/FAQPopup";
 import ComingSoonPopup from "../components/ComingSoonPopup";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [positions, setPositions] = useState([message1, message2, message3]);
   const [showPopup, setShowPopup] = useState(false);
 
