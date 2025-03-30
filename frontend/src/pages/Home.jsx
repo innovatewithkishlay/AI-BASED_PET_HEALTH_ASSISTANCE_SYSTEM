@@ -645,7 +645,7 @@ const Home = () => {
             transition={{ duration: 1, delay: 0.6 }}
           >
             <h4 className="text-2xl font-semibold mb-4">Follow Us</h4>
-            <div className="flex gap-6">
+            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
               <a
                 href="https://www.linkedin.com/in/kishlaykumar1"
                 target="_blank"
