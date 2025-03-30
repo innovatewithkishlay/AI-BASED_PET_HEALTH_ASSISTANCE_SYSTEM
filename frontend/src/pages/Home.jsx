@@ -652,7 +652,7 @@ const Home = () => {
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-500 transition duration-300"
               >
-                <i className="fab fa-linkedin text-3xl"></i>
+                <i className="fab fa-linkedin text-2xl sm:text-3xl"></i>
               </a>
               <a
                 href="https://www.instagram.com/kishlay_012"
@@ -660,7 +660,7 @@ const Home = () => {
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-pink-500 transition duration-300"
               >
-                <i className="fab fa-instagram text-3xl"></i>
+                <i className="fab fa-instagram text-2xl sm:text-3xl"></i>
               </a>
               <a
                 href="https://www.twitter.com/@kishlay_012"
@@ -668,7 +668,7 @@ const Home = () => {
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition duration-300"
               >
-                <i className="fab fa-twitter text-3xl"></i>
+                <i className="fab fa-twitter text-2xl sm:text-3xl"></i>
               </a>
               <a
                 href="https://www.facebook.com"
@@ -676,7 +676,7 @@ const Home = () => {
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-600 transition duration-300"
               >
-                <i className="fab fa-facebook text-3xl"></i>
+                <i className="fab fa-facebook text-2xl sm:text-3xl"></i>
               </a>
             </div>
           </motion.div>
