@@ -638,6 +638,7 @@ const Home = () => {
           </motion.div>
 
           {/* Social Media Section for Larger Screens */}
+          {/* Social Media Section for Larger Screens */}
           <motion.div
             className="social-media hidden sm:block" // Hidden on mobile, visible on larger screens
             initial={{ opacity: 0, x: 50 }}
@@ -680,47 +681,6 @@ const Home = () => {
               </a>
             </div>
           </motion.div>
-
-          {/* Social Media Section for Mobile Screens */}
-          <div className="social-media-mobile block sm:hidden text-center mt-6">
-            {" "}
-            {/* Visible only on mobile */}
-            <h4 className="text-xl font-semibold mb-4">Follow Us</h4>
-            <div className="flex gap-4 justify-center">
-              <a
-                href="https://www.linkedin.com/in/kishlaykumar1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-500 transition duration-300"
-              >
-                <i className="fab fa-linkedin text-2xl"></i>
-              </a>
-              <a
-                href="https://www.instagram.com/kishlay_012"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-pink-500 transition duration-300"
-              >
-                <i className="fab fa-instagram text-2xl"></i>
-              </a>
-              <a
-                href="https://www.twitter.com/@kishlay_012"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-400 transition duration-300"
-              >
-                <i className="fab fa-twitter text-2xl"></i>
-              </a>
-              <a
-                href="https://www.facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-600 transition duration-300"
-              >
-                <i className="fab fa-facebook text-2xl"></i>
-              </a>
-            </div>
-          </div>
         </motion.div>
 
         {/* Bottom Section */}
