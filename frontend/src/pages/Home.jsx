@@ -113,7 +113,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden overflow-y-scroll custom-scrollbar">
+    <div className="min-h-screen overflow-x-hidden overflow-y-scroll custom-scrollbar w-full">
       {/* First Section */}
       <motion.div
         className="w-full h-[740px] bg-[#FDE663] flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 py-8"
