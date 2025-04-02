@@ -234,7 +234,7 @@ const Chatbot = () => {
         setTypingInterval(null);
         setLoading(false);
       }
-    }, 200);
+    }, 100);
 
     setTypingInterval(interval);
   };
