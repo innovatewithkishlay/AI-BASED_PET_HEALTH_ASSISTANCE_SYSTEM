@@ -21,7 +21,7 @@ const Chatbot = () => {
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
-  const [showImagePopup, setShowImagePopup] = useState(false); // State to control the popup visibility
+  const [showImagePopup, setShowImagePopup] = useState(false);
   const navigate = useNavigate();
 
   const chatContainerRef = useRef(null);
