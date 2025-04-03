@@ -21,6 +21,7 @@ const Chatbot = () => {
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showImagePopup, setShowImagePopup] = useState(false); // State to control the popup visibility
   const navigate = useNavigate();
 
   const chatContainerRef = useRef(null);
@@ -284,6 +285,14 @@ const Chatbot = () => {
     }
   };
 
+  const handleImageIconClick = () => {
+    setShowImagePopup(true); // Show the popup when the icon is clicked
+  };
+
+  const handleClosePopup = () => {
+    setShowImagePopup(false); // Close the popup
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -464,6 +473,14 @@ const Chatbot = () => {
                 maxHeight: "150px",
               }}
             />
+            {/* Image Upload Icon */}
+            <button
+              className="absolute bottom-2 right-14 bg-gray-200 hover:bg-gray-300 text-gray-600 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300"
+              onClick={handleImageIconClick}
+            >
+              <i className="fas fa-image text-xl md:text-2xl"></i>{" "}
+              {/* Font Awesome Image Icon */}
+            </button>
             <button
               className={`absolute bottom-2 right-2 ${
                 loading
@@ -480,6 +497,32 @@ const Chatbot = () => {
             </button>
           </div>
         </div>
+
+        {/* Popup for Image Upload */}
+        {showImagePopup && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]"
+            onClick={handleClosePopup} // Close popup when clicking outside
+          >
+            <div
+              className="bg-white rounded-lg shadow-lg p-6 w-96 relative"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+            >
+              <button
+                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                onClick={handleClosePopup} // Close button
+              >
+                ✕
+              </button>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Coming Soon!
+              </h2>
+              <p className="text-gray-600">
+                Currently training our AI model for this feature. Stay tuned!
+              </p>
+            </div>
+          </div>
+        )}
       </motion.div>
     </AnimatePresence>
   );
