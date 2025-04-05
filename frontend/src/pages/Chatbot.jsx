@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FiCopy, FiLogOut } from "react-icons/fi";
+import { FiMenu, FiX, FiLogOut } from "react-icons/fi";
 import { IoSend, IoArrowUpCircle, IoStopCircle } from "react-icons/io5";
 import { AiOutlineSetting } from "react-icons/ai";
 import axios from "axios";
 import logo from "../assets/logo.png";
+import {
+  fetchChatHistories,
+  fetchConversationById,
+  deleteConversation,
+} from "../utils/api";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -22,6 +27,11 @@ const Chatbot = () => {
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showImagePopup, setShowImagePopup] = useState(false);
+  const [chatHistories, setChatHistories] = useState([]);
+  const [selectedConversationId, setSelectedConversationId] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [showHistory, setShowHistory] = useState(true); // Toggle for chat history
+  const [isMobile, setIsMobile] = useState(false); // Detect mobile screen
   const navigate = useNavigate();
 
   const chatContainerRef = useRef(null);
@@ -155,6 +165,34 @@ const Chatbot = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [showSettings, showAboutModal, showHelpModal]);
+
+  useEffect(() => {
+    // Fetch chat histories on component load
+    const loadChatHistories = async () => {
+      try {
+        const histories = await fetchChatHistories(token);
+        setChatHistories(histories);
+      } catch (error) {
+        console.error("Error loading chat histories:", error.message);
+      }
+    };
+
+    loadChatHistories();
+  }, [token]);
+
+  useEffect(() => {
+    // Detect screen size for responsive design
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Mobile if width <= 768px
+    };
+
+    handleResize(); // Set initial state
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
@@ -293,238 +331,339 @@ const Chatbot = () => {
     setShowImagePopup(false); // Close the popup
   };
 
+  const handleSelectConversation = async (conversationId) => {
+    try {
+      const conversation = await fetchConversationById(conversationId, token);
+      setMessages(conversation.messages);
+      setSelectedConversationId(conversationId);
+      if (isMobile) setShowHistory(false); // Hide history on mobile after selecting
+    } catch (error) {
+      console.error("Error loading conversation:", error.message);
+    }
+  };
+
+  const handleDeleteConversation = async (conversationId) => {
+    try {
+      await deleteConversation(conversationId, token);
+      setChatHistories((prev) =>
+        prev.filter((history) => history.conversationId !== conversationId)
+      );
+      if (selectedConversationId === conversationId) {
+        setMessages([]);
+        setSelectedConversationId(null);
+      }
+    } catch (error) {
+      console.error("Error deleting conversation:", error.message);
+    }
+  };
+
+  const handleNewConversation = () => {
+    setMessages([]);
+    setSelectedConversationId(null);
+    if (isMobile) setShowHistory(false); // Hide history on mobile for new conversation
+  };
+
   return (
-    <AnimatePresence>
-      <motion.div
-        className="h-screen bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623] flex flex-col justify-between"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
-        style={{
-          overflowX: "hidden",
-          backgroundSize: "400% 400%",
-          animation: "gradientAnimation 12s ease infinite",
-        }}
+    <div className="flex h-screen">
+      {/* Sidebar for Chat History */}
+      <div
+        className={`${
+          showHistory ? "block" : "hidden"
+        } md:block w-1/4 bg-gray-100 p-4 overflow-y-auto border-r border-gray-300`}
       >
-        <div className="fixed top-0 left-0 w-full py-4 px-6 bg-gradient-to-r from-[#FDE663] via-[#F9D423] to-[#F6A623] z-50">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <img src={logo} alt="Logo" className="w-14 h-14 object-contain" />
-            </div>
-            <div className="flex items-center gap-6">
-              <div
-                className="text-gray-800 text-2xl cursor-pointer"
-                onClick={() => navigate("/")}
-              >
-                <FiLogOut className="text-blue-600 hover:text-green-500 transition duration-300" />
-              </div>
-              <div
-                className="text-gray-800 text-2xl cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowSettings((prev) => !prev);
-                }}
-              >
-                <AiOutlineSetting className="text-blue-600 hover:text-green-500 transition duration-300" />
-              </div>
-            </div>
-          </div>
-        </div>
-        {showSettings && (
-          <motion.div
-            ref={settingsRef}
-            className="absolute top-16 right-4 md:right-10 bg-white text-gray-800 shadow-lg rounded-lg p-4 w-56 md:w-64 z-[60]"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-          >
-            <div
-              className="flex items-center gap-3 cursor-pointer text-blue-600 hover:text-blue-800 transition duration-300 py-2"
-              onClick={handleClearChat}
-            >
-              <IoArrowUpCircle className="text-xl" />
-              <span>Clear Chat</span>
-            </div>
-            <div
-              className="flex items-center gap-3 cursor-pointer text-green-600 hover:text-green-800 transition duration-300 py-2"
-              onClick={() => setShowAboutModal(true)}
-            >
-              <AiOutlineSetting className="text-xl" />
-              <span>About Chatbot</span>
-            </div>
-            <div
-              className="flex items-center gap-3 cursor-pointer text-red-600 hover:text-red-800 transition duration-300 py-2"
-              onClick={() => setShowHelpModal(true)}
-            >
-              <FiCopy className="text-xl" />
-              <span>Help</span>
-            </div>
-          </motion.div>
-        )}
-        {showAboutModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                About AI Pet Chatbot
-              </h2>
-              <p className="text-gray-600">
-                This chatbot is designed to assist pet owners with their pet's
-                health concerns. It provides helpful insights and guidance to
-                ensure your furry friends stay happy and healthy.
-              </p>
-            </div>
-          </div>
-        )}
-        {showHelpModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Help</h2>
-              <p className="text-gray-600">
-                To use this chatbot, simply type your pet-related questions in
-                the input box below and press Enter. The chatbot will provide
-                helpful responses to assist you.
-              </p>
-            </div>
-          </div>
-        )}
-        <div
-          className="flex-grow w-full overflow-y-auto pt-24 px-4 bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623]"
-          ref={chatContainerRef}
-          style={{
-            paddingBottom: "120px",
-            overflowX: "hidden",
-          }}
+        <h2 className="text-lg font-bold mb-4 text-gray-800">Chat History</h2>
+        <button
+          className="w-full bg-blue-500 text-white py-2 rounded mb-4 hover:bg-blue-600 transition duration-300"
+          onClick={handleNewConversation}
         >
-          <div className="w-full max-w-lg md:max-w-3xl mx-auto px-4">
-            {showInitialText && (
-              <motion.p
-                className="text-gray-800 text-center text-3xl md:text-5xl font-bold mt-20 md:mt-40"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                {dynamicText}
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "2px",
-                    height: "1em",
-                    background:
-                      "linear-gradient(to right, #00FF00, #00BFFF, #32CD32)",
-                    animation: "blink 1s step-end infinite",
+          New Conversation
+        </button>
+        {chatHistories.length === 0 ? (
+          <p className="text-gray-500 text-center">
+            No chat history available.
+          </p>
+        ) : (
+          chatHistories.map((history) => (
+            <div
+              key={history.conversationId}
+              className={`p-3 mb-2 rounded-lg cursor-pointer shadow-sm hover:shadow-md transition duration-300 ${
+                selectedConversationId === history.conversationId
+                  ? "bg-blue-200"
+                  : "bg-white"
+              }`}
+              onClick={() => handleSelectConversation(history.conversationId)}
+            >
+              <div className="flex justify-between items-center">
+                <span className="text-gray-800 font-medium">
+                  Conversation {history.conversationId.slice(-4)}
+                </span>
+                <button
+                  className="text-red-500 hover:text-red-700"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteConversation(history.conversationId);
                   }}
-                ></span>
-              </motion.p>
-            )}
-            {messages.length === 0
-              ? null
-              : messages.map((msg, index) => (
-                  <motion.div
-                    key={index}
-                    className={`p-4 my-5 rounded-lg flex flex-col relative group ${
-                      msg.sender === "user"
-                        ? "bg-gradient-to-r from-blue-500 to-green-500 text-white self-end ml-auto max-w-sm shadow-lg"
-                        : msg.sender === "system"
-                        ? "text-gray-500 italic self-start"
-                        : "bg-gray-100 text-gray-800 self-start max-w-4xl shadow-md"
-                    }`}
-                    style={{
-                      wordBreak: "break-word",
-                    }}
-                    initial={{
-                      opacity: 0,
-                      x: msg.sender === "user" ? 50 : -50,
-                    }}
-                    animate={{ opacity: 1, x: 0 }}
-                    ref={index === messages.length - 1 ? lastMessageRef : null}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Chat Area */}
+      <div className="flex-1 flex flex-col relative">
+        {/* Toggle Button for Sidebar */}
+        <button
+          className="absolute top-4 left-4 md:hidden bg-blue-500 text-white p-2 rounded-full shadow-lg z-10"
+          onClick={() => setShowHistory((prev) => !prev)}
+        >
+          {showHistory ? <FiX size={20} /> : <FiMenu size={20} />}
+        </button>
+
+        {/* Existing Chatbot UI */}
+        <AnimatePresence>
+          <motion.div
+            className="h-screen bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623] flex flex-col justify-between"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            style={{
+              overflowX: "hidden",
+              backgroundSize: "400% 400%",
+              animation: "gradientAnimation 12s ease infinite",
+            }}
+          >
+            <div className="fixed top-0 left-0 w-full py-4 px-6 bg-gradient-to-r from-[#FDE663] via-[#F9D423] to-[#F6A623] z-50">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={logo}
+                    alt="Logo"
+                    className="w-14 h-14 object-contain"
+                  />
+                </div>
+                <div className="flex items-center gap-6">
+                  <div
+                    className="text-gray-800 text-2xl cursor-pointer"
+                    onClick={() => navigate("/")}
                   >
-                    <span
-                      className={`break-words pr-10 ${
-                        msg.sender !== "user" ? "leading-relaxed" : ""
-                      }`}
-                      dangerouslySetInnerHTML={{ __html: msg.text }}
-                    ></span>
-                  </motion.div>
-                ))}
-            {waitingForResponse && (
+                    <FiLogOut className="text-blue-600 hover:text-green-500 transition duration-300" />
+                  </div>
+                  <div
+                    className="text-gray-800 text-2xl cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowSettings((prev) => !prev);
+                    }}
+                  >
+                    <AiOutlineSetting className="text-blue-600 hover:text-green-500 transition duration-300" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {showSettings && (
               <motion.div
-                className="my-3 text-gray-700 self-start text-sm font-light"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                ref={settingsRef}
+                className="absolute top-16 right-4 md:right-10 bg-white text-gray-800 shadow-lg rounded-lg p-4 w-56 md:w-64 z-[60]"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
               >
-                Just a second{loadingDots}
+                <div
+                  className="flex items-center gap-3 cursor-pointer text-blue-600 hover:text-blue-800 transition duration-300 py-2"
+                  onClick={handleClearChat}
+                >
+                  <IoArrowUpCircle className="text-xl" />
+                  <span>Clear Chat</span>
+                </div>
+                <div
+                  className="flex items-center gap-3 cursor-pointer text-green-600 hover:text-green-800 transition duration-300 py-2"
+                  onClick={() => setShowAboutModal(true)}
+                >
+                  <AiOutlineSetting className="text-xl" />
+                  <span>About Chatbot</span>
+                </div>
+                <div
+                  className="flex items-center gap-3 cursor-pointer text-red-600 hover:text-red-800 transition duration-300 py-2"
+                  onClick={() => setShowHelpModal(true)}
+                >
+                  <FiCopy className="text-xl" />
+                  <span>Help</span>
+                </div>
               </motion.div>
             )}
-            <div className="h-24"></div>
-          </div>
-        </div>
-        <div className="fixed bottom-0 left-0 w-full py-4 px-6 bg-transparent shadow-none">
-          <div className="flex w-full max-w-lg md:max-w-3xl mx-auto items-center bg-gray-100 rounded-lg border border-gray-300 relative">
-            <textarea
-              className="flex-grow p-3 md:p-4 bg-gray-200 text-gray-800 rounded-lg outline-none resize-none overflow-hidden"
-              placeholder="Write your concern over here..."
-              value={input}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyPress}
-              rows={1}
-              style={{
-                minHeight: "80px",
-                maxHeight: "150px",
-              }}
-            />
-            {/* Image Upload Icon */}
-            <button
-              className="absolute bottom-2 right-14 bg-gray-200 hover:bg-gray-300 text-gray-600 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300"
-              onClick={handleImageIconClick}
-            >
-              <i className="fas fa-image text-xl md:text-2xl"></i>{" "}
-              {/* Font Awesome Image Icon */}
-            </button>
-            <button
-              className={`absolute bottom-2 right-2 ${
-                loading
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
-              } text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300`}
-              onClick={loading ? handleStopResponse : handleSendMessage}
-            >
-              {loading ? (
-                <IoStopCircle className="text-xl md:text-2xl" />
-              ) : (
-                <IoArrowUpCircle className="text-xl md:text-2xl" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Popup for Image Upload */}
-        {showImagePopup && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]"
-            onClick={handleClosePopup} // Close popup when clicking outside
-          >
+            {showAboutModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+                  <h2 className="text-xl font-bold text-gray-800 mb-4">
+                    About AI Pet Chatbot
+                  </h2>
+                  <p className="text-gray-600">
+                    This chatbot is designed to assist pet owners with their
+                    pet's health concerns. It provides helpful insights and
+                    guidance to ensure your furry friends stay happy and
+                    healthy.
+                  </p>
+                </div>
+              </div>
+            )}
+            {showHelpModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+                  <h2 className="text-xl font-bold text-gray-800 mb-4">Help</h2>
+                  <p className="text-gray-600">
+                    To use this chatbot, simply type your pet-related questions
+                    in the input box below and press Enter. The chatbot will
+                    provide helpful responses to assist you.
+                  </p>
+                </div>
+              </div>
+            )}
             <div
-              className="bg-white rounded-lg shadow-lg p-6 w-96 relative"
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+              className="flex-grow w-full overflow-y-auto pt-24 px-4 bg-gradient-to-b from-[#FDE663] via-[#F9D423] to-[#F6A623]"
+              ref={chatContainerRef}
+              style={{
+                paddingBottom: "120px",
+                overflowX: "hidden",
+              }}
             >
-              <button
-                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-                onClick={handleClosePopup} // Close button
-              >
-                ✕
-              </button>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                Coming Soon!
-              </h2>
-              <p className="text-gray-600">
-                Currently training our AI model for this feature. Stay tuned!
-              </p>
+              <div className="w-full max-w-lg md:max-w-3xl mx-auto px-4">
+                {showInitialText && (
+                  <motion.p
+                    className="text-gray-800 text-center text-3xl md:text-5xl font-bold mt-20 md:mt-40"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {dynamicText}
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: "2px",
+                        height: "1em",
+                        background:
+                          "linear-gradient(to right, #00FF00, #00BFFF, #32CD32)",
+                        animation: "blink 1s step-end infinite",
+                      }}
+                    ></span>
+                  </motion.p>
+                )}
+                {messages.length === 0
+                  ? null
+                  : messages.map((msg, index) => (
+                      <motion.div
+                        key={index}
+                        className={`p-4 my-5 rounded-lg flex flex-col relative group ${
+                          msg.sender === "user"
+                            ? "bg-gradient-to-r from-blue-500 to-green-500 text-white self-end ml-auto max-w-sm shadow-lg"
+                            : msg.sender === "system"
+                            ? "text-gray-500 italic self-start"
+                            : "bg-gray-100 text-gray-800 self-start max-w-4xl shadow-md"
+                        }`}
+                        style={{
+                          wordBreak: "break-word",
+                        }}
+                        initial={{
+                          opacity: 0,
+                          x: msg.sender === "user" ? 50 : -50,
+                        }}
+                        animate={{ opacity: 1, x: 0 }}
+                        ref={
+                          index === messages.length - 1 ? lastMessageRef : null
+                        }
+                      >
+                        <span
+                          className={`break-words pr-10 ${
+                            msg.sender !== "user" ? "leading-relaxed" : ""
+                          }`}
+                          dangerouslySetInnerHTML={{ __html: msg.text }}
+                        ></span>
+                      </motion.div>
+                    ))}
+                {waitingForResponse && (
+                  <motion.div
+                    className="my-3 text-gray-700 self-start text-sm font-light"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    Just a second{loadingDots}
+                  </motion.div>
+                )}
+                <div className="h-24"></div>
+              </div>
             </div>
-          </div>
-        )}
-      </motion.div>
-    </AnimatePresence>
+            <div className="fixed bottom-0 left-0 w-full py-4 px-6 bg-transparent shadow-none">
+              <div className="flex w-full max-w-lg md:max-w-3xl mx-auto items-center bg-gray-100 rounded-lg border border-gray-300 relative">
+                <textarea
+                  className="flex-grow p-3 md:p-4 bg-gray-200 text-gray-800 rounded-lg outline-none resize-none overflow-hidden"
+                  placeholder="Write your concern over here..."
+                  value={input}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyPress}
+                  rows={1}
+                  style={{
+                    minHeight: "80px",
+                    maxHeight: "150px",
+                  }}
+                />
+                {/* Image Upload Icon */}
+                <button
+                  className="absolute bottom-2 right-14 bg-gray-200 hover:bg-gray-300 text-gray-600 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300"
+                  onClick={handleImageIconClick}
+                >
+                  <i className="fas fa-image text-xl md:text-2xl"></i>{" "}
+                  {/* Font Awesome Image Icon */}
+                </button>
+                <button
+                  className={`absolute bottom-2 right-2 ${
+                    loading
+                      ? "bg-red-500 hover:bg-red-600"
+                      : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+                  } text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300`}
+                  onClick={loading ? handleStopResponse : handleSendMessage}
+                >
+                  {loading ? (
+                    <IoStopCircle className="text-xl md:text-2xl" />
+                  ) : (
+                    <IoArrowUpCircle className="text-xl md:text-2xl" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Popup for Image Upload */}
+            {showImagePopup && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70]"
+                onClick={handleClosePopup} // Close popup when clicking outside
+              >
+                <div
+                  className="bg-white rounded-lg shadow-lg p-6 w-96 relative"
+                  onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+                >
+                  <button
+                    className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                    onClick={handleClosePopup} // Close button
+                  >
+                    ✕
+                  </button>
+                  <h2 className="text-xl font-bold text-gray-800 mb-4">
+                    Coming Soon!
+                  </h2>
+                  <p className="text-gray-600">
+                    Currently training our AI model for this feature. Stay
+                    tuned!
+                  </p>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
 

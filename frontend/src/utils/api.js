@@ -4,6 +4,10 @@ import { toast } from "react-toastify";
 const API_BASE_URL =
   "https://ai-based-pet-health-assistance-system.onrender.com/api/auth";
 
+// Base URL for chatbot API
+const CHATBOT_API_BASE_URL =
+  "https://ai-based-pet-health-assistance-system.onrender.com/api/chatbot";
+
 // Function to handle Sign-Up
 export const signUp = async (data) => {
   try {
@@ -58,6 +62,60 @@ export const logout = async () => {
     return response;
   } catch (error) {
     toast.error("Logout Failed");
+    throw error;
+  }
+};
+
+// Fetch all chat histories
+export const fetchChatHistories = async (token) => {
+  try {
+    const response = await axios.get(`${CHATBOT_API_BASE_URL}/history`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching chat histories:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+// Fetch a specific conversation by ID
+export const fetchConversationById = async (conversationId, token) => {
+  try {
+    const response = await axios.get(
+      `${CHATBOT_API_BASE_URL}/history/${conversationId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching conversation:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+// Delete a specific conversation
+export const deleteConversation = async (conversationId, token) => {
+  try {
+    const response = await axios.delete(
+      `${CHATBOT_API_BASE_URL}/history/${conversationId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error deleting conversation:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };

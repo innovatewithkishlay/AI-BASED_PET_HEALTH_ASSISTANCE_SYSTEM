@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaBars, FaTimes } from "react-icons/fa"; // Import hamburger and close icons
+import { FaBars, FaTimes } from "react-icons/fa";
 import logo from "../assets/logo.png";
 import SignUpModal from "./SignUpModal";
 import LoginModal from "./LoginModal";
@@ -15,10 +15,10 @@ const Navbar = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem("authToken") // Check if the user is logged in
+    !!localStorage.getItem("authToken")
   );
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
 
   const handleLogout = () => {
