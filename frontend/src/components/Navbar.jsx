@@ -110,7 +110,7 @@ const Navbar = () => {
                 : "font-normal text-gray-600"
             } text-[14px] sm:text-[15px] md:text-[17px] leading-[27px] transition`}
           >
-            Our AI
+            Virtual Vet
           </button>
           <button
             onClick={() => setIsAboutUsOpen(true)}
@@ -193,7 +193,7 @@ const Navbar = () => {
               }}
               className="text-[16px] font-medium text-gray-800 mb-6 hover:text-white hover:bg-gray-800 px-4 py-2 rounded-lg transition duration-300"
             >
-              Our AI
+              Virtual Vet
             </button>
             <button
               onClick={() => {

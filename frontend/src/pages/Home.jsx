@@ -315,7 +315,7 @@ const Home = () => {
           >
             <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500"></span>
             <span className="absolute inset-0 w-full h-[2px] bg-white opacity-50 animate-line-move"></span>
-            <span className="relative z-10">Chat with Our AI</span>
+            <span className="relative z-10">AI Chatbot</span>
           </button>
         </motion.div>
       </motion.div>
