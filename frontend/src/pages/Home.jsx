@@ -637,15 +637,16 @@ const Home = () => {
             </ul>
           </motion.div>
 
-          {/* Social Media Section for Larger Screens */}
-          {/* Social Media Section for Larger Screens */}
+          {/* Social Media Section */}
           <motion.div
-            className="social-media hidden sm:block" // Hidden on mobile, visible on larger screens
+            className="social-media"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
           >
-            <h4 className="text-2xl font-semibold mb-4">Follow Us</h4>
+            <h4 className="text-2xl font-semibold mb-4 text-center md:text-left">
+              Follow Us
+            </h4>
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
               <a
                 href="https://www.linkedin.com/in/kishlaykumar1"
@@ -678,6 +679,14 @@ const Home = () => {
                 className="text-gray-400 hover:text-blue-600 transition duration-300"
               >
                 <i className="fab fa-facebook text-2xl sm:text-3xl"></i>
+              </a>
+              <a
+                href="https://github.com/innovatewithkishlay"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-gray-500 transition duration-300"
+              >
+                <i className="fab fa-github text-2xl sm:text-3xl"></i>
               </a>
             </div>
           </motion.div>
